@@ -1,0 +1,207 @@
+{
+  "settings": {
+    "store_name": "Atelier da Carne",
+    "tagline": "Carnes de qualidade e cortes especiais",
+    "whatsapp": "5541996752749",
+    "phone_display": "(41) 99675-2749",
+    "instagram": "atelierdacarne4",
+    "address": "Rua Maranhão, 1710 — Portão, Curitiba/PR",
+    "maps_url": "https://maps.google.com/?q=Rua+Maranh%C3%A3o,+1710+-+Port%C3%A3o,+Curitiba+-+PR",
+    "hours": [
+      { "days": [1, 2, 3, 4, 5], "open": "09:00", "close": "19:30" },
+      { "days": [6], "open": "09:00", "close": "18:00" }
+    ],
+    "pickup_enabled": true,
+    "delivery_enabled": true,
+    "delivery_note": "A taxa de entrega é combinada pelo WhatsApp conforme o bairro.",
+    "announcement": "Encomende pelo catálogo e retire sem fila — ou receba em casa."
+  },
+  "categories": [
+    {
+      "slug": "bovinos-premium",
+      "name": "Bovinos Premium",
+      "subtitle": "Cortes nobres para grelha, parrilla e ocasiões especiais",
+      "animal": "bovino",
+      "cover": "/categorias/bovinas-premium.webp",
+      "products": [
+        { "n": "Ancho Black", "p": 69.99, "r": ["ancho"], "b": "Black", "t": ["Grelha", "Parrilla"], "d": "Miolo da costela com marmoreio intenso. Suculento, macio e cheio de sabor — o queridinho de quem entende de churrasco.", "f": true },
+        { "n": "Mignon Bovino", "p": 110.99, "r": ["file-mignon"], "t": ["Frigideira", "Grelha", "Medalhão"], "d": "O corte mais macio do boi. Perfeito para medalhões, tournedos e preparos rápidos em fogo alto.", "f": true },
+        { "n": "Prime Rib Bovino", "p": 69.99, "r": ["ancho"], "t": ["Grelha", "Forno"], "d": "Ancho com osso: mais sabor, mais suculência e uma apresentação de respeito na tábua." },
+        { "n": "Prime Rib Suíno", "p": 29.99, "a": "suino", "r": ["carre"], "t": ["Grelha", "Forno"], "d": "Carré suíno alto, com osso, macio e suculento. Fica incrível na brasa ou selado e finalizado no forno." },
+        { "n": "T-Bone", "p": 59.99, "r": ["contrafile", "file-mignon"], "t": ["Grelha", "Parrilla"], "d": "Dois cortes em um: contrafilé de um lado e mignon do outro, separados pelo osso em T." },
+        { "n": "Bife Ancho", "p": 75.99, "r": ["ancho"], "t": ["Grelha", "Frigideira"], "d": "Bifes altos de ancho, prontos para selar. Gordura entremeada que derrete e perfuma a carne." },
+        { "n": "Contra Filé Chorizo", "p": 79.99, "r": ["contrafile"], "t": ["Grelha", "Parrilla"], "d": "Bife de chorizo à moda argentina: alto, com capa de gordura lateral e sabor marcante.", "f": true },
+        { "n": "Cowboy Steak", "p": 79.99, "r": ["ancho"], "t": ["Grelha", "Parrilla"], "b": "Destaque", "d": "Ancho com o osso da costela aparado. Um corte imponente para ser o centro da mesa." },
+        { "n": "Denver Steak", "p": 79.99, "r": ["acem"], "t": ["Grelha", "Frigideira"], "d": "Corte do miolo do acém com marmoreio surpreendente. Macio, saboroso e ótimo custo-benefício." },
+        { "n": "Flat Iron Steak", "p": 89.99, "r": ["paleta"], "t": ["Grelha", "Frigideira"], "d": "Retirado do miolo da paleta: textura macia e sabor intenso, um dos cortes mais macios do boi." },
+        { "n": "Short Rib", "p": 69.99, "r": ["costela"], "t": ["Defumação", "Forno", "Parrilla"], "d": "Costela em peça curta com muita carne sobre o osso. Ideal para defumar ou assar lentamente." },
+        { "n": "Shoulder Steak", "p": 79.99, "r": ["paleta"], "t": ["Grelha", "Frigideira"], "d": "Bife da paleta, magro e saboroso, que vai bem na grelha ou na frigideira bem quente." }
+      ]
+    },
+    {
+      "slug": "bovinos",
+      "name": "Bovinos",
+      "subtitle": "Cortes do dia a dia, moídos e preparados",
+      "animal": "bovino",
+      "cover": "/categorias/bovinas.webp",
+      "products": [
+        { "n": "Picanha Bovina", "p": 110.99, "r": ["picanha"], "t": ["Churrasco", "Grelha"], "b": "Mais pedido", "d": "A rainha do churrasco brasileiro, com a capa de gordura que garante suculência.", "f": true },
+        { "n": "Fraldinha", "p": 59.99, "r": ["fraldinha"], "t": ["Churrasco", "Forno"], "d": "Fibras longas, muito suculenta e saborosa. Asse inteira e fatie contra a fibra." },
+        { "n": "Assado de Tiras", "p": 69.99, "r": ["costela"], "t": ["Parrilla", "Churrasco"], "d": "Costela em tiras transversais, clássico da parrilla. Rápida na brasa e cheia de sabor." },
+        { "n": "Costela Bovina Desossada", "p": 49.99, "r": ["costela"], "t": ["Forno", "Fogo de chão"], "d": "Costela sem osso, prática para assados longos e desfiados." },
+        { "n": "Costela Bovina Dianteira", "p": 49.99, "r": ["costela"], "t": ["Forno", "Fogo de chão"] },
+        { "n": "Costela Bovina Ripa", "p": 39.99, "r": ["costela"], "t": ["Churrasco", "Forno"] },
+        { "n": "Costela Minga", "p": 39.99, "r": ["ponta-agulha"], "t": ["Panela de pressão", "Forno"] },
+        { "n": "Costela Borboleta", "p": 39.99, "r": ["costela"], "t": ["Churrasco", "Forno"] },
+        { "n": "Costela Resfriada Temperada", "p": 39.99, "r": ["costela"], "t": ["Forno", "Churrasco"], "b": "Temperada" },
+        { "n": "Cupim Bovino", "p": 52.99, "r": ["cupim"], "t": ["Forno", "Defumação"], "d": "Corte da corcova do boi, marmorizado e macio quando assado lentamente." },
+        { "n": "Alcatra sem Osso", "p": 84.99, "r": ["alcatra"], "t": ["Grelha", "Bifes", "Churrasco"] },
+        { "n": "Alcatra com Osso", "p": 59.99, "r": ["alcatra"], "t": ["Churrasco", "Grelha"] },
+        { "n": "Bife Milanesa Alcatra", "p": 85.99, "r": ["alcatra"], "t": ["Empanar", "Frigideira"] },
+        { "n": "Strogonoff Alcatra", "p": 84.98, "r": ["alcatra"], "t": ["Panela"] },
+        { "n": "Patinho", "p": 54.99, "r": ["patinho"], "t": ["Bifes", "Moído", "Panela"] },
+        { "n": "Bife Milanesa Patinho", "p": 55.99, "r": ["patinho"], "t": ["Empanar", "Frigideira"] },
+        { "n": "Strogonoff Patinho", "p": 52.99, "r": ["patinho"], "t": ["Panela"] },
+        { "n": "Coxão Mole", "p": 57.99, "r": ["coxao-mole"], "t": ["Bifes", "Panela"] },
+        { "n": "Coxão Mole Moído", "p": 59.99, "r": ["coxao-mole"], "t": ["Moído", "Hambúrguer"] },
+        { "n": "Strogonoff Coxão", "p": 57.99, "r": ["coxao-mole"], "t": ["Panela"] },
+        { "n": "Bife Milanesa Coxão", "p": 58.99, "r": ["coxao-mole"], "t": ["Empanar", "Frigideira"] },
+        { "n": "Posta Branca", "p": 42.99, "r": ["coxao-duro"], "t": ["Panela", "Cozidos"] },
+        { "n": "Posta Vermelha", "p": 47.99, "r": ["coxao-mole"], "t": ["Panela", "Assados"] }
+      ]
+    },
+    {
+      "slug": "suinos",
+      "name": "Suínos",
+      "subtitle": "Do lombo ao pernil — inclusive recheados da casa",
+      "animal": "suino",
+      "cover": "/categorias/suinas.webp",
+      "products": [
+        { "n": "Picanha Suína", "p": 39.99, "r": ["picanha"], "t": ["Churrasco", "Grelha"], "d": "Macia, com capa de gordura que fica crocante na brasa.", "f": true },
+        { "n": "Lombo Suíno", "p": 34.99, "r": ["lombo"], "t": ["Forno", "Grelha"] },
+        { "n": "Mignon Suíno", "p": 39.99, "r": ["mignon"], "t": ["Frigideira", "Medalhão"] },
+        { "n": "Carré Suíno", "p": 21.99, "r": ["carre"], "t": ["Grelha", "Forno"] },
+        { "n": "Bisteca Suína", "p": 21.99, "r": ["carre"], "t": ["Grelha", "Frigideira"] },
+        { "n": "Bisteca Suína Especial", "p": 25.99, "r": ["carre"], "t": ["Grelha", "Frigideira"] },
+        { "n": "Costela Suína sem Pele", "p": 39.99, "r": ["costela"], "t": ["Forno", "Churrasco"] },
+        { "n": "Costela Suína Defumada", "p": 55.99, "r": ["costela"], "t": ["Feijoada", "Forno"], "b": "Defumada" },
+        { "n": "Panceta Suína", "p": 39.99, "r": ["barriga"], "t": ["Churrasco", "Forno"] },
+        { "n": "Barriga Resfriada Temperada", "p": 39.99, "r": ["barriga"], "t": ["Forno", "Churrasco"], "b": "Temperada" },
+        { "n": "Paleta Suína com Osso", "p": 25.99, "r": ["paleta"], "t": ["Forno", "Panela"] },
+        { "n": "Paleta Suína sem Osso", "p": 31.99, "r": ["paleta"], "t": ["Forno", "Panela"] },
+        { "n": "Sobrepaleta Suína", "p": 32.99, "r": ["copa"], "t": ["Churrasco", "Forno"] },
+        { "n": "Pernil Suíno com Osso", "p": 25.99, "r": ["pernil"], "t": ["Forno"] },
+        { "n": "Pernil Suíno sem Osso", "p": 31.99, "r": ["pernil"], "t": ["Forno", "Desfiado"] },
+        { "n": "Lombo Suíno Recheado", "p": 49.90, "r": ["lombo"], "t": ["Forno"], "b": "Recheado", "d": "Recheado na casa, pronto para ir ao forno." },
+        { "n": "Panceta Suína Recheada", "p": 49.90, "r": ["barriga"], "t": ["Forno"], "b": "Recheado", "d": "Panceta enrolada e recheada na casa — pele pururuca, interior suculento." },
+        { "n": "Pernil Desossado Recheado", "p": 49.90, "r": ["pernil"], "t": ["Forno"], "b": "Recheado" },
+        { "n": "Sobrepaleta Desossada Recheada", "p": 49.90, "r": ["copa"], "t": ["Forno"], "b": "Recheado" },
+        { "n": "Máscara Suína", "p": 21.99, "r": ["cabeca"], "t": ["Feijoada", "Cozidos"] },
+        { "n": "Pé Suíno", "p": 21.99, "r": ["pe"], "t": ["Feijoada"] },
+        { "n": "Rabo Suíno", "p": 21.99, "r": ["rabo"], "t": ["Feijoada"] }
+      ]
+    },
+    {
+      "slug": "frango",
+      "name": "Frango",
+      "subtitle": "Cortes frescos, temperados e desossados",
+      "animal": "frango",
+      "cover": "/categorias/frango-2.webp",
+      "products": [
+        { "n": "Coxinha da Asa Temperada", "p": 25.99, "r": ["asa"], "t": ["Churrasco", "Airfryer"], "b": "Temperada", "f": true },
+        { "n": "Coxinha da Asa", "p": 24.99, "r": ["asa"], "t": ["Churrasco", "Airfryer", "Forno"] },
+        { "n": "Tulipa", "p": 30.99, "r": ["asa"], "t": ["Airfryer", "Churrasco"] },
+        { "n": "Tulipa na Mostarda", "p": 31.99, "r": ["asa"], "t": ["Airfryer", "Churrasco"], "b": "Temperada" },
+        { "n": "Tulipa Temperada", "p": 31.99, "r": ["asa"], "t": ["Airfryer", "Churrasco"], "b": "Temperada" },
+        { "n": "Filé de Peito de Frango", "p": 29.99, "r": ["peito"], "t": ["Grelha", "Frigideira"] },
+        { "n": "Peito de Frango sem Osso", "p": 29.99, "r": ["peito"], "t": ["Forno", "Desfiado"] },
+        { "n": "Strogonoff de Frango", "p": 29.99, "r": ["peito"], "t": ["Panela"] },
+        { "n": "Coxa com Sobrecoxa", "p": 13.99, "r": ["coxa", "sobrecoxa"], "t": ["Forno", "Churrasco"] },
+        { "n": "Coxa com Sobrecoxa Desossada", "p": 21.99, "r": ["coxa", "sobrecoxa"], "t": ["Churrasco", "Grelha"] },
+        { "n": "Coxa de Frango", "p": 10.99, "r": ["coxa"], "t": ["Forno", "Airfryer"] },
+        { "n": "Sobrecoxa", "p": 15.99, "r": ["sobrecoxa"], "t": ["Forno", "Churrasco"] },
+        { "n": "Sobrecoxa Desossada", "p": 21.99, "r": ["sobrecoxa"], "t": ["Churrasco", "Grelha"] },
+        { "n": "Coração de Frango", "p": 45.99, "r": ["miudos"], "t": ["Churrasco"] },
+        { "n": "Moela de Frango", "p": 12.99, "r": ["miudos"], "t": ["Panela", "Petisco"] }
+      ]
+    },
+    {
+      "slug": "linguicas",
+      "name": "Linguiças",
+      "subtitle": "Seleção Bizinelli, Belvedere e Perdigão",
+      "animal": null,
+      "cover": "/categorias/linguicas.webp",
+      "products": [
+        { "n": "Linguiça Toscana Bizinelli", "p": 24.99, "a": "suino", "r": ["pernil"], "t": ["Churrasco"] },
+        { "n": "Linguiça Toscana na Brasa Perdigão", "p": 32.90, "t": ["Churrasco"] },
+        { "n": "Linguiça Pernil Bizinelli", "p": 29.90, "a": "suino", "r": ["pernil"], "t": ["Churrasco"] },
+        { "n": "Linguiça Pernil Apimentada Bizinelli", "p": 39.99, "a": "suino", "r": ["pernil"], "t": ["Churrasco"], "b": "Picante" },
+        { "n": "Linguiça Pernil com Bacon Bizinelli", "p": 39.99, "a": "suino", "r": ["pernil"], "t": ["Churrasco"] },
+        { "n": "Linguiça Pernil com Queijo Bizinelli", "p": 39.99, "a": "suino", "r": ["pernil"], "t": ["Churrasco"] },
+        { "n": "Linguiça Pernil Grossa", "p": 26.99, "a": "suino", "r": ["pernil"], "t": ["Churrasco"] },
+        { "n": "Linguiça Campeira Bizinelli", "p": 39.99, "t": ["Churrasco"] },
+        { "n": "Linguiça Fina Bizinelli", "p": 45.99, "t": ["Churrasco", "Petisco"] },
+        { "n": "Linguiça Fina Belvedere", "p": 45.99, "t": ["Churrasco", "Petisco"] },
+        { "n": "Linguiça Calabresa", "p": 32.99, "t": ["Petisco", "Feijoada"] },
+        { "n": "Linguiça Paio Bizinelli", "p": 35.90, "t": ["Feijoada"] }
+      ]
+    },
+    {
+      "slug": "hamburgueres",
+      "name": "Hambúrgueres",
+      "subtitle": "Blends da casa, moldados no Atelier",
+      "animal": "bovino",
+      "cover": "/categorias/hamburgueres.webp",
+      "products": [
+        { "n": "Hambúrguer de Picanha 180g", "p": 7.00, "u": "un", "r": ["picanha"], "t": ["Chapa", "Grelha"], "b": "180 g", "f": true },
+        { "n": "Hambúrguer de Fraldinha 150g", "p": 6.50, "u": "un", "r": ["fraldinha"], "t": ["Chapa", "Grelha"], "b": "150 g" },
+        { "n": "Hambúrguer de Costela 150g", "p": 6.00, "u": "un", "r": ["costela"], "t": ["Chapa", "Grelha"], "b": "150 g" },
+        { "n": "Hambúrguer de Acém com Bacon", "p": 40.00, "r": ["acem"], "t": ["Chapa", "Grelha"] },
+        { "n": "Hambúrguer Bovino", "p": 33.99, "t": ["Chapa", "Grelha"] }
+      ]
+    },
+    {
+      "slug": "espetinhos",
+      "name": "Espetinhos",
+      "subtitle": "Montados na casa, prontos para a brasa",
+      "animal": null,
+      "cover": "/categorias/espetinhos.webp",
+      "products": [
+        { "n": "Espetinho de Alcatra", "p": 92.99, "a": "bovino", "r": ["alcatra"], "t": ["Churrasco"] },
+        { "n": "Espetinho de Coração", "p": 46.99, "a": "frango", "r": ["miudos"], "t": ["Churrasco"] },
+        { "n": "Espetinho de Frango", "p": 30.99, "a": "frango", "r": ["peito"], "t": ["Churrasco"] },
+        { "n": "Espetinho de Frango com Bacon", "p": 39.99, "a": "frango", "r": ["peito"], "t": ["Churrasco"] },
+        { "n": "Espetinho de Kafta", "p": 42.99, "t": ["Churrasco"] },
+        { "n": "Espetinho de Linguiça Fina", "p": 46.99, "t": ["Churrasco"] },
+        { "n": "Espetinho Xixo", "p": 49.99, "t": ["Churrasco"], "d": "Carne, linguiça, pimentão e cebola intercalados no espeto." }
+      ]
+    }
+  ],
+  "kits": [
+    {
+      "name": "Kit Semanal",
+      "tagline": "A semana inteira resolvida",
+      "price": 139.90,
+      "badge": "Mais vendido",
+      "items": ["500 g Strogonoff de carne", "500 g Moída de patinho", "500 g Bife de patinho", "500 g Filé de peito de frango", "500 g Strogonoff de frango", "500 g Sobrepaleta suína"],
+      "image": "/categorias/bovinas-2.webp"
+    },
+    {
+      "name": "Quarta do Hambúrguer",
+      "tagline": "Burger night completa para 6",
+      "price": 59.90,
+      "badge": "Toda quarta",
+      "items": ["6 pães brioche", "6 hambúrgueres 150 g (fraldinha ou costela)", "6 fatias de queijo cheddar", "12 fatias de bacon", "1 sacola térmica"],
+      "image": "/categorias/hamburgueres.webp"
+    },
+    {
+      "name": "Kit Churrasco",
+      "tagline": "O churrasco de domingo, pronto",
+      "price": 129.90,
+      "badge": "Pedir com 2h",
+      "items": ["1 kg Contrafilé com osso", "1 kg Coxinha da asa temperada", "500 g Linguiça Toscana Bizinelli", "1 Pão de alho Santa Massa 240 g"],
+      "note": "Pedido com 2 horas de antecedência.",
+      "image": "/categorias/espetinhos.webp"
+    }
+  ]
+}
