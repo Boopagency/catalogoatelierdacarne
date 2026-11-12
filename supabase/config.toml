@@ -34,7 +34,8 @@ site_url = "http://localhost:3000"
 enable_signup = false
 
 [auth.email]
-enable_signup = false
+# mantém o login por e-mail ligado; cadastro novo fica bloqueado por auth.enable_signup
+enable_signup = true
 enable_confirmations = false
 
 [edge_runtime]
