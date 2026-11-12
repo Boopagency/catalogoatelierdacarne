@@ -3,7 +3,7 @@
 begin;
 
 insert into public.settings (id, store_name, tagline, whatsapp, phone_display, instagram, address, maps_url, hours, pickup_enabled, delivery_enabled, delivery_note, announcement)
-values (1, 'Atelier da Carne', 'Carnes de qualidade e cortes especiais', '5541996752749', '(41) 99675-2749', 'atelierdacarne4', 'Rua Maranhão, 1710, Portão, Curitiba/PR', 'https://maps.google.com/?q=Rua+Maranh%C3%A3o,+1710+-+Port%C3%A3o,+Curitiba+-+PR', '[{"days":[1,2,3,4,5],"open":"09:00","close":"19:30"},{"days":[6],"open":"09:00","close":"18:00"}]'::jsonb, true, true, 'A taxa de entrega é combinada pelo WhatsApp conforme o bairro.', 'Encomende pelo catálogo e retire sem fila, ou receba em casa.')
+values (1, 'Atelier da Carne', 'Carnes de qualidade e cortes especiais', '554196752749', '(41) 99675-2749', 'atelierdacarne4', 'Rua Maranhão, 1710, Portão, Curitiba/PR', 'https://maps.google.com/?q=Rua+Maranh%C3%A3o,+1710+-+Port%C3%A3o,+Curitiba+-+PR', '[{"days":[1,2,3,4,5],"open":"09:00","close":"19:30"},{"days":[6],"open":"09:00","close":"18:00"}]'::jsonb, true, true, 'A taxa de entrega é combinada pelo WhatsApp conforme o bairro.', 'Encomende pelo catálogo e retire sem fila, ou receba em casa.')
 on conflict (id) do nothing;
 
 insert into public.categories (slug, name, subtitle, animal, cover_url, sort_order)

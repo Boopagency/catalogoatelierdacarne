@@ -25,7 +25,7 @@ export function StoreSettingsPage() {
   const save = async () => {
     if (!s) return;
     const wa = s.whatsapp.replace(/\D/g, "");
-    if (wa.length < 12) return toast.error("WhatsApp precisa ter código do país e DDD, ex.: 5541996752749");
+    if (wa.length < 12) return toast.error("WhatsApp precisa ter código do país e DDD, ex.: 554196752749");
     setSaving(true);
     const { id: _id, ...rest } = s as Settings & { id?: number; updated_at?: string };
     delete (rest as { updated_at?: string }).updated_at;
