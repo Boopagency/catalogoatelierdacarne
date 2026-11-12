@@ -1,7 +1,6 @@
 "use client";
 
 import { Plus } from "lucide-react";
-import { toast } from "sonner";
 import { QtyStepper } from "@/components/ui/qty-stepper";
 import { useCart } from "@/lib/cart";
 import { effectivePrice, QTY_DEFAULT } from "@/lib/format";
@@ -33,7 +32,6 @@ export function ProductCard({ product, cover, onOpen }: Props) {
       animal: product.animal,
       regions: product.cut_regions,
     });
-    toast(`${product.name} no pedido`);
   };
 
   const action = soldOut ? null : line ? (
@@ -42,7 +40,7 @@ export function ProductCard({ product, cover, onOpen }: Props) {
     <button
       onClick={quickAdd}
       aria-label={`Adicionar ${product.name}`}
-      className="focus-ring grid size-9 shrink-0 place-items-center border border-line-strong text-ink transition hover:border-red hover:bg-red"
+      className="focus-ring grid size-11 shrink-0 place-items-center border border-line-strong text-ink transition hover:border-red hover:bg-red active:bg-red md:size-9"
     >
       <Plus className="size-4" strokeWidth={1.5} />
     </button>

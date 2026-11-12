@@ -16,6 +16,7 @@ import { CartDrawer } from "./cart-drawer";
 import { KitCard } from "./kit-card";
 import { ProductCard } from "./product-card";
 import { ProductSheet } from "./product-sheet";
+import { SearchOverlay, type SearchOverlayHandle } from "./search-overlay";
 
 type Status = { open: boolean; label: string } | null;
 const pad = (n: number) => String(n).padStart(2, "0");
@@ -68,12 +69,19 @@ export function Storefront({ catalog }: { catalog: Catalog }) {
   }, [searching]);
 
   const close = useCallback(() => setSelected(null), []);
+  const searchRef = useRef<SearchOverlayHandle>(null);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const typing = useTyping();
+  const goTo = useCallback((id: string) => {
+    setQuery("");
+    requestAnimationFrame(() => document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" }));
+  }, []);
 
   return (
     <>
       <Header settings={settings} status={status} />
       <Hero settings={settings} status={status} />
-      <StickyNav query={query} setQuery={setQuery} categories={categories} hasKits={visibleKits.length > 0} active={active} />
+      <StickyNav query={query} setQuery={setQuery} categories={categories} hasKits={visibleKits.length > 0} active={active} onGo={goTo} onOpenSearch={() => searchRef.current?.open()} />
 
       <main className="mx-auto max-w-[1320px] px-4 pb-40 md:px-8">
         {searching ? (
@@ -98,7 +106,17 @@ export function Storefront({ catalog }: { catalog: Catalog }) {
       </main>
 
       <Footer settings={settings} />
-      <MobileCartBar />
+      <SearchOverlay
+        ref={searchRef}
+        index={index}
+        categories={categories}
+        catById={catById}
+        onOpenProduct={setSelected}
+        onGoTo={goTo}
+        whatsapp={settings.whatsapp}
+        onOpenChange={setSearchOpen}
+      />
+      <MobileCartBar hidden={typing} raised={searchOpen} />
       <ProductSheet product={selected} category={selected ? catById.get(selected.category_id) ?? null : null} onClose={close} />
       <CartDrawer settings={settings} live={catalog.live} />
     </>
@@ -155,15 +173,20 @@ function Hero({ settings, status }: { settings: Catalog["settings"]; status: Sta
   return (
     <section id="topo" className="border-b border-line">
       <div className="mx-auto grid max-w-[1320px] md:grid-cols-12 md:px-8">
-        {/* Foto pôster */}
-        <div className="frame relative aspect-[4/5] overflow-hidden md:order-2 md:col-span-5 md:aspect-auto md:min-h-[640px] md:border-x md:border-line">
+        {/* Foto pôster: no celular é mais baixa e leva o título por cima */}
+        <div className="frame relative h-[min(56vh,440px)] overflow-hidden md:order-2 md:col-span-5 md:h-auto md:min-h-[640px] md:border-x md:border-line">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src="/hero/tbone.webp" alt="T-bone marmorizado" className="poster-img absolute inset-0 size-full object-cover" />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/20" />
-          <p className="font-script absolute bottom-10 left-8 -rotate-[7deg] text-[64px] leading-none text-[#f2d4cc] md:hidden" aria-hidden>
-            Atelier
-          </p>
-          <p className="sign absolute bottom-7 right-7 text-right text-[12px] font-bold leading-tight text-white/75">
+          <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/10 to-black/20 md:from-black/70 md:via-transparent" />
+          <div className="absolute inset-x-7 bottom-7 md:hidden" aria-hidden>
+            <p className="font-script mb-2 ml-[2px] -rotate-[6deg] text-[46px] leading-none text-[#f2d4cc]">Atelier</p>
+            <p className="sign text-[58px] font-black leading-[0.8] text-white">
+              Cortes
+              <br />
+              especiais
+            </p>
+          </div>
+          <p className="sign absolute bottom-7 right-7 hidden text-right text-[12px] font-bold leading-tight text-white/75 md:block">
             Nº 1710
             <br />
             Portão · Curitiba
@@ -171,49 +194,59 @@ function Hero({ settings, status }: { settings: Catalog["settings"]; status: Sta
         </div>
 
         {/* Tipografia */}
-        <div className="relative z-10 flex flex-col justify-between px-4 pb-8 pt-8 md:order-1 md:col-span-7 md:pb-10 md:pl-0 md:pr-12 md:pt-14">
+        <div className="relative z-10 flex flex-col justify-between px-4 pb-6 pt-5 md:order-1 md:col-span-7 md:pb-10 md:pl-0 md:pr-12 md:pt-14">
           <div>
-            <p className="sign text-[14px] font-semibold text-tan">Catálogo de produtos · Preço do dia</p>
-            <h1 className="sign relative mt-4 text-[64px] font-black leading-[0.8] tracking-[-0.01em] text-ink sm:text-[96px] md:text-[132px] lg:text-[158px]">
+            <p className="sign hidden text-[14px] font-semibold text-tan md:block">Catálogo de produtos · Preço do dia</p>
+            <h1 className="sign relative mt-4 hidden text-[132px] font-black leading-[0.8] tracking-[-0.01em] text-ink md:block lg:text-[158px]">
               Cortes
               <br />
               especiais
-              <span className="font-script pointer-events-none absolute -right-[22%] top-[-6%] z-10 hidden -rotate-[9deg] text-[104px] normal-case leading-none tracking-normal text-[#f2d4cc] mix-blend-normal md:block lg:-right-[30%] lg:text-[132px]" aria-hidden>
+              <span className="font-script pointer-events-none absolute -right-[22%] top-[-6%] z-10 -rotate-[9deg] text-[104px] normal-case leading-none tracking-normal text-[#f2d4cc] lg:-right-[30%] lg:text-[132px]" aria-hidden>
                 Atelier
               </span>
             </h1>
-            <p className="mt-8 max-w-[34ch] text-[17px] leading-relaxed text-ink-2 md:text-[19px]">
-              Escolha o corte, veja de onde ele sai e mande o pedido pronto no nosso WhatsApp. Preço atualizado todo dia, direto do balcão.
+            <h1 className="sr-only md:hidden">Atelier da Carne: cortes especiais</h1>
+            <p className="max-w-[34ch] text-[16px] leading-relaxed text-ink-2 md:mt-8 md:text-[19px]">
+              Escolha o corte, veja de onde ele sai e mande o pedido pronto no nosso WhatsApp. Preço atualizado todo dia.
             </p>
-            <div className="mt-8 flex flex-wrap gap-3">
-              <a href="#kits" className="sign focus-ring inline-flex h-12 items-center gap-2 bg-red px-6 text-[17px] font-bold text-white transition hover:bg-red-bright">
+            <div className="mt-5 grid grid-cols-2 gap-2 md:mt-8 md:flex md:flex-wrap md:gap-3">
+              <a href="#kits" className="sign focus-ring inline-flex h-12 items-center justify-center gap-2 bg-red px-4 text-[17px] font-bold text-white transition hover:bg-red-bright md:px-6">
                 Ver os cortes <ArrowDownRight className="size-4" />
               </a>
               <a
                 href={waLink(settings.whatsapp, "Olá! Vim pelo catálogo do Atelier da Carne.")}
                 target="_blank"
                 rel="noopener"
-                className="sign focus-ring inline-flex h-12 items-center gap-2 border border-ink px-6 text-[17px] font-bold text-ink transition hover:bg-ink hover:text-bg"
+                className="sign focus-ring inline-flex h-12 items-center justify-center gap-2 border border-ink px-4 text-[17px] font-bold text-ink transition hover:bg-ink hover:text-bg md:px-6"
               >
-                <WhatsAppIcon className="size-4" /> Falar com a loja
+                <WhatsAppIcon className="size-4" /> WhatsApp
               </a>
+            </div>
+            {/* celular: status e endereço numa linha */}
+            <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-1 md:hidden">
+              <StatusText status={status} className="text-[15px] text-ink" />
+              {settings.address && (
+                <a href={settings.maps_url ?? "#"} target="_blank" rel="noopener" className="sign text-[15px] font-semibold text-ink-2 underline decoration-line-strong underline-offset-4">
+                  {settings.address.split(",").slice(0, 2).join(",")}
+                </a>
+              )}
             </div>
           </div>
 
-          {/* Créditos de pôster */}
-          <dl className="mt-12 grid grid-cols-2 border-t border-line pt-5 text-[14px] md:grid-cols-3">
+          {/* Créditos de pôster (desktop) */}
+          <dl className="mt-12 hidden grid-cols-3 border-t border-line pt-5 text-[14px] md:grid">
             <div className="pr-4">
               <dt className="sign text-[12px] font-semibold text-muted">Agora</dt>
               <dd className="mt-1">{status ? <StatusText status={status} className="text-[15px] text-ink" /> : <span className="sign text-[15px] font-semibold">{hours[0]}</span>}</dd>
             </div>
-            <div className="border-l border-line pl-4 md:pr-4">
+            <div className="border-l border-line pl-4 pr-4">
               <dt className="sign text-[12px] font-semibold text-muted">Horário</dt>
               {hours.map((h) => (
                 <dd key={h} className="sign mt-1 text-[15px] font-semibold text-ink">{h}</dd>
               ))}
             </div>
             {settings.address && (
-              <div className="col-span-2 mt-4 border-t border-line pt-4 md:col-span-1 md:mt-0 md:border-l md:border-t-0 md:pl-4 md:pt-0">
+              <div className="border-l border-line pl-4">
                 <dt className="sign text-[12px] font-semibold text-muted">Endereço</dt>
                 <dd className="mt-1">
                   <a href={settings.maps_url ?? "#"} target="_blank" rel="noopener" className="sign text-[15px] font-semibold text-ink underline decoration-line-strong underline-offset-4 hover:decoration-tan">
@@ -227,7 +260,7 @@ function Hero({ settings, status }: { settings: Catalog["settings"]; status: Sta
       </div>
       {settings.announcement && (
         <div className="border-t border-line">
-          <p className="mx-auto flex max-w-[1320px] items-center gap-3 px-4 py-3 text-[15px] text-ink md:px-8">
+          <p className="mx-auto flex max-w-[1320px] items-center gap-3 px-4 py-3 text-[14px] text-ink md:px-8 md:text-[15px]">
             <span className="size-2 shrink-0 bg-red" />
             {settings.announcement}
           </p>
@@ -243,12 +276,16 @@ function StickyNav({
   categories,
   hasKits,
   active,
+  onGo,
+  onOpenSearch,
 }: {
   query: string;
   setQuery: (q: string) => void;
   categories: CategoryWithProducts[];
   hasKits: boolean;
   active: string;
+  onGo: (id: string) => void;
+  onOpenSearch: () => void;
 }) {
   const inputRef = useRef<HTMLInputElement>(null);
   const chipsRef = useRef<HTMLDivElement>(null);
@@ -263,15 +300,19 @@ function StickyNav({
     if (box && el) box.scrollTo({ left: el.offsetLeft - box.clientWidth / 2 + el.clientWidth / 2, behavior: "smooth" });
   }, [active]);
 
-  const go = (id: string) => {
-    setQuery("");
-    requestAnimationFrame(() => document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" }));
-  };
+  const go = onGo;
 
   return (
     <div className="sticky top-14 z-30 border-b border-line bg-bg">
-      <div className="mx-auto max-w-[1320px] md:flex md:items-stretch md:px-8">
-        <label className="relative flex items-center border-b border-line px-4 md:w-[340px] md:shrink-0 md:border-b-0 md:border-r md:pl-0 md:pr-4">
+      <div className="mx-auto flex max-w-[1320px] items-stretch md:px-8">
+        {/* celular: abre a busca em tela cheia */}
+        <button
+          onClick={onOpenSearch}
+          className="sign flex h-13 shrink-0 items-center gap-2 border-r border-line-strong bg-surface px-4 text-[16px] font-bold text-ink active:bg-surface-2 md:hidden"
+        >
+          <Search className="size-[18px] text-tan" strokeWidth={2} /> Buscar
+        </button>
+        <label className="relative hidden items-center md:flex md:w-[340px] md:shrink-0 md:border-r md:border-line md:pr-4">
           <Search className="size-[18px] shrink-0 text-muted" strokeWidth={1.5} />
           <input
             ref={inputRef}
@@ -301,7 +342,7 @@ function StickyNav({
             </button>
           )}
         </label>
-        <div ref={chipsRef} className="no-scrollbar relative flex overflow-x-auto px-1 md:px-0">
+        <div ref={chipsRef} className="no-scrollbar relative flex min-w-0 flex-1 overflow-x-auto px-1 md:px-0">
           {items.map((it) => {
             const on = !query && active === it.id;
             return (
@@ -415,20 +456,38 @@ function SearchResults({
   );
 }
 
-function MobileCartBar() {
+/** true enquanto um campo de texto está em foco (teclado aberto no celular) */
+function useTyping() {
+  const [typing, setTyping] = useState(false);
+  useEffect(() => {
+    const isField = (el: Element | null) =>
+      !!el && (el.tagName === "TEXTAREA" || (el.tagName === "INPUT" && !["checkbox", "radio", "button", "submit"].includes((el as HTMLInputElement).type)));
+    const on = (e: FocusEvent) => isField(e.target as Element) && setTyping(true);
+    const off = () => setTimeout(() => setTyping(isField(document.activeElement)), 60);
+    document.addEventListener("focusin", on);
+    document.addEventListener("focusout", off);
+    return () => {
+      document.removeEventListener("focusin", on);
+      document.removeEventListener("focusout", off);
+    };
+  }, []);
+  return typing;
+}
+
+function MobileCartBar({ hidden, raised }: { hidden: boolean; raised: boolean }) {
   const lines = useCart((s) => s.lines);
   const open = useCart((s) => s.open);
   const setOpen = useCart((s) => s.setOpen);
   const total = cartTotal(lines);
   return (
     <AnimatePresence>
-      {lines.length > 0 && !open && (
+      {lines.length > 0 && !open && !hidden && (
         <motion.div
           initial={{ y: 100 }}
           animate={{ y: 0 }}
           exit={{ y: 100 }}
           transition={{ type: "tween", ease: [0.22, 1, 0.36, 1], duration: 0.35 }}
-          className="fixed inset-x-0 bottom-0 z-40 border-t border-line-strong bg-bg pb-[env(safe-area-inset-bottom)] md:hidden"
+          className={`fixed inset-x-0 bottom-0 border-t border-line-strong bg-bg pb-[env(safe-area-inset-bottom)] md:hidden ${raised ? "z-[46]" : "z-40"}`}
         >
           <button onClick={() => setOpen(true)} className="flex h-16 w-full items-stretch text-white">
             <span className="sign flex flex-1 items-center gap-3 px-4 text-[18px] font-bold">
