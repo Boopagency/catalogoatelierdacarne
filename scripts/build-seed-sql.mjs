@@ -16,7 +16,7 @@ const num = (n) => (n === null || n === undefined ? "null" : Number(n).toFixed(2
 
 const s = data.settings;
 const out = [];
-out.push("-- Gerado por scripts/build-seed-sql.mjs — não edite à mão.");
+out.push("-- Gerado por scripts/build-seed-sql.mjs. Não edite à mão.");
 out.push("begin;");
 out.push(
   `insert into public.settings (id, store_name, tagline, whatsapp, phone_display, instagram, address, maps_url, hours, pickup_enabled, delivery_enabled, delivery_note, announcement)

@@ -22,7 +22,7 @@ export function buildOrderMessage(opts: {
   out.push("");
   out.push("*Itens*");
   for (const l of lines) {
-    out.push(`• ${formatQty(l.qty, l.unit)} — ${l.name} — ${brl(lineTotal(l))}`);
+    out.push(`• ${formatQty(l.qty, l.unit)} de ${l.name}: ${brl(lineTotal(l))}`);
     if (l.notes.trim()) out.push(`   _${l.notes.trim()}_`);
   }
   out.push("");
@@ -33,7 +33,7 @@ export function buildOrderMessage(opts: {
   out.push(`*WhatsApp:* ${formatPhone(info.phone)}`);
   if (info.fulfillment === "entrega") {
     out.push("*Recebimento:* Entrega");
-    out.push(`*Endereço:* ${info.address.trim()}${info.neighborhood.trim() ? ` — ${info.neighborhood.trim()}` : ""}`);
+    out.push(`*Endereço:* ${info.address.trim()}${info.neighborhood.trim() ? `, ${info.neighborhood.trim()}` : ""}`);
   } else {
     out.push("*Recebimento:* Retirada na loja");
   }

@@ -82,9 +82,9 @@ export function Switch({ checked, onChange, label, disabled }: { checked: boolea
         e.stopPropagation();
         onChange(!checked);
       }}
-      className={`focus-ring relative inline-flex h-7 w-12 shrink-0 items-center rounded-full transition disabled:opacity-50 ${checked ? "bg-ok" : "bg-surface-3 ring-1 ring-line-strong"}`}
+      className={`focus-ring relative inline-flex h-7 w-12 shrink-0 items-center transition disabled:opacity-50 ${checked ? "bg-ok" : "bg-surface-3 ring-1 ring-line-strong"}`}
     >
-      <span className={`inline-block size-5 rounded-full bg-white shadow transition ${checked ? "translate-x-6" : "translate-x-1"}`} />
+      <span className={`inline-block size-5 bg-white shadow transition ${checked ? "translate-x-6" : "translate-x-1"}`} />
     </button>
   );
 }

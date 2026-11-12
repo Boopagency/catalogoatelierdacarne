@@ -111,7 +111,7 @@ export function AdminShell({ email, children }: { email: string; children: React
                 <n.icon className={`size-[18px] ${isActive(n.href) ? "text-red-bright" : ""}`} />
                 {n.label}
                 {n.href === "/admin" && newCount > 0 && (
-                  <span className="tabular ml-auto grid min-w-6 place-items-center rounded-full bg-red px-1.5 text-[11px] leading-6 text-white">{newCount}</span>
+                  <span className="tabular ml-auto grid min-w-6 place-items-center bg-red px-1.5 text-[11px] leading-6 text-white">{newCount}</span>
                 )}
               </Link>
             ))}
@@ -131,10 +131,10 @@ export function AdminShell({ email, children }: { email: string; children: React
         <header className="sticky top-0 z-30 flex h-14 items-center justify-between border-b border-line bg-bg/90 px-4 backdrop-blur-xl md:hidden">
           <Wordmark compact />
           <div className="flex items-center gap-1">
-            <a href="/" target="_blank" className="grid size-10 place-items-center rounded-full text-ink-2" aria-label="Ver catálogo">
+            <a href="/" target="_blank" className="grid size-10 place-items-center text-ink-2" aria-label="Ver catálogo">
               <ExternalLink className="size-[18px]" />
             </a>
-            <button onClick={logout} className="grid size-10 place-items-center rounded-full text-ink-2" aria-label="Sair">
+            <button onClick={logout} className="grid size-10 place-items-center text-ink-2" aria-label="Sair">
               <LogOut className="size-[18px]" />
             </button>
           </div>
@@ -149,7 +149,7 @@ export function AdminShell({ email, children }: { email: string; children: React
               <n.icon className={`size-5 ${isActive(n.href) ? "text-red-bright" : ""}`} />
               {n.label}
               {n.href === "/admin" && newCount > 0 && (
-                <span className="tabular absolute right-[calc(50%-18px)] top-2 grid min-w-[18px] place-items-center rounded-full bg-red px-1 text-[10px] leading-[18px] text-white">{newCount}</span>
+                <span className="tabular absolute right-[calc(50%-18px)] top-2 grid min-w-[18px] place-items-center bg-red px-1 text-[10px] leading-[18px] text-white">{newCount}</span>
               )}
             </Link>
           ))}

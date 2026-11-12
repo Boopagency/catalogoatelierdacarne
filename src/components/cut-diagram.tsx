@@ -18,7 +18,6 @@ export function CutDiagram({ animal, regions = [], variant = "full", className, 
   const raw = useId().replace(/:/g, "");
   const clipId = `clip-${raw}`;
   const gradId = `grad-${raw}`;
-  const glowId = `glow-${raw}`;
   const active = new Set(regions);
   const mini = variant === "mini";
   const clipped = art.regions.filter((r) => (animal === "frango" ? r.clip === true : r.clip !== false));
@@ -46,19 +45,7 @@ export function CutDiagram({ animal, regions = [], variant = "full", className, 
           <stop offset="0%" stopColor="var(--cut-hi-a)" />
           <stop offset="100%" stopColor="var(--cut-hi-b)" />
         </linearGradient>
-        <filter id={glowId} x="-30%" y="-30%" width="160%" height="160%">
-          <feGaussianBlur stdDeviation={mini ? 4 : 9} />
-        </filter>
       </defs>
-
-      {/* brilho atrás do corte destacado */}
-      {!mini && regions.length > 0 && (
-        <g clipPath={`url(#${clipId})`} filter={`url(#${glowId})`} opacity={0.9}>
-          {art.regions.filter((r) => active.has(r.id)).map((r, i) => (
-            <path key={i} d={r.d} fill="var(--cut-glow)" />
-          ))}
-        </g>
-      )}
 
       {art.extras.filter((e) => e.back).map((e, i) => (
         <path key={`xb${i}`} d={e.d} fill="var(--diagram-fill)" stroke="var(--diagram-outline)" strokeWidth={mini ? 2 : 1.25} strokeLinejoin="round" />
@@ -70,8 +57,8 @@ export function CutDiagram({ animal, regions = [], variant = "full", className, 
             key={`r${i}`}
             d={r.d}
             fill={regionFill(r.id)}
-            stroke="var(--diagram-line)"
-            strokeWidth={mini ? 1.5 : 1}
+            stroke={active.has(r.id) ? "rgb(255 255 255 / 0.9)" : "var(--diagram-line)"}
+            strokeWidth={active.has(r.id) ? (mini ? 2 : 1.25) : mini ? 1.5 : 1}
             className={active.has(r.id) && !onToggle ? "cut-active" : undefined}
             {...interactive(r.id)}
           >
@@ -105,7 +92,7 @@ export function CutDiagram({ animal, regions = [], variant = "full", className, 
           key={`o${i}`}
           d={r.d}
           fill={regionFill(r.id)}
-          stroke={active.has(r.id) ? "var(--cut-hi-a)" : "var(--diagram-outline)"}
+          stroke="var(--diagram-outline)"
           strokeWidth={mini ? 2 : 1.25}
           strokeDasharray={r.id === "miudos" && !active.has(r.id) ? "3 3" : undefined}
           strokeLinejoin="round"

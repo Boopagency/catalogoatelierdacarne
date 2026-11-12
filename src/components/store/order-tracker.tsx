@@ -3,8 +3,7 @@
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useState } from "react";
-import { ArrowLeft, Bike, Check, CircleX, Clock, PackageCheck, Scissors, Store } from "lucide-react";
-import { motion } from "motion/react";
+import { ArrowLeft } from "lucide-react";
 import { WhatsAppIcon } from "@/components/ui/icons";
 import { Wordmark } from "@/components/ui/logo";
 import { brl, dateTime, formatQty, STATUS_LABEL } from "@/lib/format";
@@ -73,143 +72,116 @@ function Tracker({ code, settings, live }: Props) {
   const number = remote?.number ?? local?.number ?? null;
   const notFound = loaded && !remote && !local;
 
-  const steps: { id: OrderStatus; label: string; icon: typeof Check }[] = [
-    { id: "novo", label: "Pedido recebido", icon: Check },
-    { id: "confirmado", label: "Confirmado pela loja", icon: PackageCheck },
-    { id: "separando", label: "Separando seus cortes", icon: Scissors },
-    fulfillment === "entrega"
-      ? { id: "em_rota", label: "Saiu para entrega", icon: Bike }
-      : { id: "pronto", label: "Pronto para retirada", icon: Store },
-    { id: "concluido", label: fulfillment === "entrega" ? "Entregue" : "Retirado", icon: Check },
+  const steps: { id: OrderStatus; label: string }[] = [
+    { id: "novo", label: "Pedido recebido" },
+    { id: "confirmado", label: "Confirmado pela loja" },
+    { id: "separando", label: "Separando os cortes" },
+    fulfillment === "entrega" ? { id: "em_rota", label: "Saiu para entrega" } : { id: "pronto", label: "Pronto para retirar" },
+    { id: "concluido", label: fulfillment === "entrega" ? "Entregue" : "Retirado" },
   ];
   const order: OrderStatus[] = ["novo", "confirmado", "separando", "pronto", "em_rota", "concluido"];
   const reached = (s: OrderStatus) => order.indexOf(status) >= order.indexOf(s) || (s === "em_rota" && status === "concluido");
   const when = (s: OrderStatus) => remote?.status_history?.find((h) => h.status === s)?.at;
 
-  const wa = local ? waLink(local.whatsapp, local.message) : waLink(settings.whatsapp, `Olá! Quero falar sobre o pedido ${number ? `#${number}` : code}.`);
+  const wa = local ? waLink(local.whatsapp, local.message) : waLink(settings.whatsapp, `Olá! Quero falar sobre o pedido ${number ? `nº ${number}` : code}.`);
 
   return (
     <div className="min-h-dvh">
       <header className="border-b border-line">
-        <div className="mx-auto flex h-16 max-w-2xl items-center justify-between px-4">
-          <Link href="/" className="focus-ring inline-flex items-center gap-1.5 rounded-lg text-sm text-ink-2 hover:text-ink">
+        <div className="mx-auto flex h-14 max-w-3xl items-center justify-between px-4">
+          <Link href="/" className="sign focus-ring inline-flex items-center gap-2 text-[15px] font-bold text-ink-2 hover:text-ink">
             <ArrowLeft className="size-4" /> Catálogo
           </Link>
           <Wordmark compact />
         </div>
       </header>
 
-      <main className="mx-auto max-w-2xl px-4 pb-24 pt-8">
+      <main className="mx-auto max-w-3xl px-4 pb-24 pt-10">
         {notFound ? (
-          <div className="py-20 text-center">
-            <p className="font-display text-3xl text-ink">Pedido não encontrado</p>
-            <p className="mt-2 text-sm text-muted">Confira o código {code} ou fale com a loja.</p>
+          <div className="border border-line px-6 py-20 text-center">
+            <p className="sign text-[48px] font-extralight leading-none text-ink">Pedido não encontrado</p>
+            <p className="mt-3 text-[15px] italic text-muted">Confira o código {code} ou fale com a loja.</p>
           </div>
         ) : (
           <>
-            <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
-              {isNew && (
-                <motion.div
-                  initial={{ scale: 0.5, opacity: 0 }}
-                  animate={{ scale: 1, opacity: 1 }}
-                  transition={{ type: "spring", damping: 12, stiffness: 180, delay: 0.1 }}
-                  className="mb-5 grid size-16 place-items-center rounded-full bg-red text-white shadow-[0_0_0_10px_rgba(179,32,27,.15)]"
-                >
-                  <Check className="size-8" strokeWidth={3} />
-                </motion.div>
-              )}
-              <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-tan">
-                {number ? `Pedido #${number}` : "Pedido"} · código {code}
+            <p className="sign text-[15px] font-bold text-tan">Código {code}</p>
+            <h1 className="sign mt-2 text-[64px] font-black leading-[0.82] text-ink md:text-[96px]">
+              {number ? `Pedido nº ${number}` : "Seu pedido"}
+            </h1>
+            {status === "cancelado" ? (
+              <p className="mt-5 border-l-2 border-red pl-4 text-[17px] text-ink-2">Este pedido foi cancelado. Fale com a loja se tiver dúvidas.</p>
+            ) : isNew ? (
+              <p className="mt-5 max-w-xl text-[17px] leading-relaxed text-ink-2">
+                {remote?.first_name ? `${remote.first_name}, seu` : "Seu"} pedido foi registrado. Falta um passo: enviar a mensagem no WhatsApp para a loja confirmar.
+                Guarde esta página para acompanhar.
               </p>
-              <h1 className="font-display mt-2 text-[38px] font-semibold leading-[1.02] text-ink md:text-5xl">
-                {status === "cancelado"
-                  ? "Pedido cancelado"
-                  : isNew
-                    ? <>Pedido registrado{remote?.first_name ? `, ${remote.first_name}` : ""}!</>
-                    : STATUS_LABEL[status]}
-              </h1>
-              {isNew && status !== "cancelado" && (
-                <p className="mt-3 text-[15px] leading-relaxed text-ink-2">
-                  Último passo: envie a mensagem no WhatsApp para a loja confirmar. Guarde esta página para acompanhar o andamento.
-                </p>
-              )}
-            </motion.div>
+            ) : (
+              <p className="sign mt-5 text-[24px] font-bold text-ink-2">{STATUS_LABEL[status]}</p>
+            )}
 
             <a
               href={wa}
               target="_blank"
               rel="noopener"
-              className="focus-ring mt-6 flex h-14 w-full items-center justify-center gap-2.5 rounded-2xl bg-[#1fa855] text-[15px] font-semibold text-white shadow-[0_12px_30px_-12px_rgba(31,168,85,.8)] transition hover:bg-[#23bd60] active:scale-[.98]"
+              className="sign focus-ring mt-8 flex h-14 w-full items-center justify-center gap-3 bg-red text-[18px] font-extrabold text-white transition hover:bg-red-bright md:w-auto md:px-8 md:inline-flex"
             >
               <WhatsAppIcon className="size-5" />
               {isNew ? "Enviar pedido no WhatsApp" : "Falar com a loja"}
             </a>
 
-            {status === "cancelado" ? (
-              <div className="mt-8 flex items-center gap-3 rounded-2xl border border-line bg-surface p-5 text-sm text-ink-2">
-                <CircleX className="size-5 text-red-bright" /> Este pedido foi cancelado. Fale com a loja se tiver dúvidas.
-              </div>
-            ) : (
-              <ol className="mt-10 space-y-0">
-                {steps.map((s, i) => {
-                  const done = reached(s.id);
-                  const current = done && (i === steps.length - 1 || !reached(steps[i + 1].id));
-                  const at = when(s.id);
-                  return (
-                    <li key={s.id} className="relative flex gap-4 pb-7 last:pb-0">
-                      {i < steps.length - 1 && (
-                        <span className={`absolute left-[17px] top-9 h-[calc(100%-36px)] w-px ${reached(steps[i + 1].id) ? "bg-red" : "bg-line-strong"}`} />
-                      )}
-                      <span
-                        className={`relative grid size-9 shrink-0 place-items-center rounded-full border transition ${
-                          done ? "border-red bg-red text-white" : "border-line-strong bg-surface text-muted"
-                        } ${current ? "shadow-[0_0_0_6px_rgba(179,32,27,.18)]" : ""}`}
-                      >
-                        <s.icon className="size-4" />
-                      </span>
-                      <div className="pt-1.5">
-                        <p className={`text-[15px] font-medium ${done ? "text-ink" : "text-muted"}`}>{s.label}</p>
-                        {at && <p className="tabular mt-0.5 text-xs text-muted">{dateTime(at)}</p>}
-                        {current && !at && live && <p className="mt-0.5 text-xs text-muted">Atualiza sozinho</p>}
-                      </div>
-                    </li>
-                  );
-                })}
-              </ol>
+            {status !== "cancelado" && (
+              <section className="mt-14">
+                <h2 className="sign border-b border-line-strong pb-2 text-[22px] font-extrabold text-ink">Andamento</h2>
+                <ol>
+                  {steps.map((s, i) => {
+                    const done = reached(s.id);
+                    const current = done && (i === steps.length - 1 || !reached(steps[i + 1].id));
+                    const at = when(s.id);
+                    return (
+                      <li key={s.id} className={`flex items-center gap-4 border-b border-line py-4 ${done ? "" : "opacity-45"}`}>
+                        <span className={`sign tabular grid size-9 shrink-0 place-items-center text-[15px] font-bold ${current ? "bg-red text-white" : done ? "bg-ink text-bg" : "border border-line-strong text-muted"}`}>
+                          {String(i + 1).padStart(2, "0")}
+                        </span>
+                        <span className={`sign flex-1 text-[20px] font-bold ${done ? "text-ink" : "text-muted"}`}>{s.label}</span>
+                        {at ? (
+                          <span className="sign tabular text-[14px] font-medium text-muted">{dateTime(at)}</span>
+                        ) : current && live ? (
+                          <span className="text-[13px] italic text-muted">atualiza sozinho</span>
+                        ) : null}
+                      </li>
+                    );
+                  })}
+                </ol>
+              </section>
             )}
 
             {items.length > 0 && (
-              <section className="mt-10 rounded-3xl border border-line bg-surface p-5 md:p-6">
-                <div className="flex items-center justify-between">
-                  <h2 className="font-display text-xl font-semibold text-ink">Itens</h2>
-                  <span className="inline-flex items-center gap-1.5 text-xs text-muted">
-                    {fulfillment === "entrega" ? <Bike className="size-3.5" /> : <Store className="size-3.5" />}
-                    {fulfillment === "entrega" ? "Entrega" : "Retirada na loja"}
-                  </span>
+              <section className="mt-14 border border-line-strong">
+                <div className="flex items-center justify-between border-b border-line-strong px-5 py-3">
+                  <h2 className="sign text-[22px] font-extrabold text-ink">Comanda</h2>
+                  <span className="sign text-[14px] font-bold text-muted">{fulfillment === "entrega" ? "Entrega" : "Retirada na loja"}</span>
                 </div>
-                <ul className="mt-4 divide-y divide-line">
+                <ul className="px-5">
                   {items.map((it, i) => (
-                    <li key={i} className="flex justify-between gap-4 py-3 text-sm">
+                    <li key={i} className="flex justify-between gap-4 border-b border-line py-3 last:border-0">
                       <div>
-                        <p className="text-ink">
-                          <span className="tabular text-ink-2">{formatQty(Number(it.quantity), it.unit)}</span> · {it.name}
+                        <p className="text-[16px] text-ink">
+                          <span className="sign tabular font-bold">{formatQty(Number(it.quantity), it.unit)}</span> {it.name}
                         </p>
-                        {it.notes && <p className="mt-0.5 text-xs italic text-tan">“{it.notes}”</p>}
+                        {it.notes && <p className="mt-1 text-[14px] italic text-tan">{it.notes}</p>}
                       </div>
-                      <span className="tabular shrink-0 text-ink">{brl(Number(it.line_total))}</span>
+                      <span className="sign tabular shrink-0 text-[17px] font-bold text-ink">{brl(Number(it.line_total))}</span>
                     </li>
                   ))}
                 </ul>
-                <div className="mt-2 flex items-baseline justify-between border-t border-line pt-4">
-                  <span className="text-sm text-ink-2">Total estimado</span>
-                  <span className="tabular font-display text-2xl font-semibold text-ink">{brl(Number(total))}</span>
+                <div className="flex items-end justify-between border-t-4 border-double border-line-strong px-5 py-4">
+                  <span className="sign text-[16px] font-bold text-ink-2">Total estimado</span>
+                  <span className="sign tabular text-[34px] font-extrabold leading-none text-ink">{brl(Number(total))}</span>
                 </div>
               </section>
             )}
 
-            <p className="mt-6 flex items-center justify-center gap-1.5 text-center text-xs text-muted">
-              <Clock className="size-3.5" /> {settings.address}
-            </p>
+            {settings.address && <p className="mt-8 text-[14px] italic text-muted">{settings.address}</p>}
           </>
         )}
       </main>

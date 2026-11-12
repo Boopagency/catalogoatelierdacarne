@@ -5,7 +5,7 @@
     "whatsapp": "5541996752749",
     "phone_display": "(41) 99675-2749",
     "instagram": "atelierdacarne4",
-    "address": "Rua Maranhão, 1710 — Portão, Curitiba/PR",
+    "address": "Rua Maranhão, 1710, Portão, Curitiba/PR",
     "maps_url": "https://maps.google.com/?q=Rua+Maranh%C3%A3o,+1710+-+Port%C3%A3o,+Curitiba+-+PR",
     "hours": [
       { "days": [1, 2, 3, 4, 5], "open": "09:00", "close": "19:30" },
@@ -14,7 +14,7 @@
     "pickup_enabled": true,
     "delivery_enabled": true,
     "delivery_note": "A taxa de entrega é combinada pelo WhatsApp conforme o bairro.",
-    "announcement": "Encomende pelo catálogo e retire sem fila — ou receba em casa."
+    "announcement": "Encomende pelo catálogo e retire sem fila, ou receba em casa."
   },
   "categories": [
     {
@@ -24,7 +24,7 @@
       "animal": "bovino",
       "cover": "/categorias/bovinas-premium.webp",
       "products": [
-        { "n": "Ancho Black", "p": 69.99, "r": ["ancho"], "b": "Black", "t": ["Grelha", "Parrilla"], "d": "Miolo da costela com marmoreio intenso. Suculento, macio e cheio de sabor — o queridinho de quem entende de churrasco.", "f": true },
+        { "n": "Ancho Black", "p": 69.99, "r": ["ancho"], "b": "Black", "t": ["Grelha", "Parrilla"], "d": "Miolo da costela com marmoreio intenso. Suculento, macio e cheio de sabor. O queridinho de quem entende de churrasco.", "f": true },
         { "n": "Mignon Bovino", "p": 110.99, "r": ["file-mignon"], "t": ["Frigideira", "Grelha", "Medalhão"], "d": "O corte mais macio do boi. Perfeito para medalhões, tournedos e preparos rápidos em fogo alto.", "f": true },
         { "n": "Prime Rib Bovino", "p": 69.99, "r": ["ancho"], "t": ["Grelha", "Forno"], "d": "Ancho com osso: mais sabor, mais suculência e uma apresentação de respeito na tábua." },
         { "n": "Prime Rib Suíno", "p": 29.99, "a": "suino", "r": ["carre"], "t": ["Grelha", "Forno"], "d": "Carré suíno alto, com osso, macio e suculento. Fica incrível na brasa ou selado e finalizado no forno." },
@@ -73,7 +73,7 @@
     {
       "slug": "suinos",
       "name": "Suínos",
-      "subtitle": "Do lombo ao pernil — inclusive recheados da casa",
+      "subtitle": "Do lombo ao pernil, inclusive os recheados da casa",
       "animal": "suino",
       "cover": "/categorias/suinas.webp",
       "products": [
@@ -93,7 +93,7 @@
         { "n": "Pernil Suíno com Osso", "p": 25.99, "r": ["pernil"], "t": ["Forno"] },
         { "n": "Pernil Suíno sem Osso", "p": 31.99, "r": ["pernil"], "t": ["Forno", "Desfiado"] },
         { "n": "Lombo Suíno Recheado", "p": 49.90, "r": ["lombo"], "t": ["Forno"], "b": "Recheado", "d": "Recheado na casa, pronto para ir ao forno." },
-        { "n": "Panceta Suína Recheada", "p": 49.90, "r": ["barriga"], "t": ["Forno"], "b": "Recheado", "d": "Panceta enrolada e recheada na casa — pele pururuca, interior suculento." },
+        { "n": "Panceta Suína Recheada", "p": 49.90, "r": ["barriga"], "t": ["Forno"], "b": "Recheado", "d": "Panceta enrolada e recheada na casa. Pele pururuca, interior suculento." },
         { "n": "Pernil Desossado Recheado", "p": 49.90, "r": ["pernil"], "t": ["Forno"], "b": "Recheado" },
         { "n": "Sobrepaleta Desossada Recheada", "p": 49.90, "r": ["copa"], "t": ["Forno"], "b": "Recheado" },
         { "n": "Máscara Suína", "p": 21.99, "r": ["cabeca"], "t": ["Feijoada", "Cozidos"] },
@@ -184,7 +184,7 @@
       "price": 139.90,
       "badge": "Mais vendido",
       "items": ["500 g Strogonoff de carne", "500 g Moída de patinho", "500 g Bife de patinho", "500 g Filé de peito de frango", "500 g Strogonoff de frango", "500 g Sobrepaleta suína"],
-      "image": "/categorias/bovinas-2.webp"
+      "image": "/categorias/suinas.webp"
     },
     {
       "name": "Quarta do Hambúrguer",

@@ -45,7 +45,7 @@ export function KitsPage() {
                   // eslint-disable-next-line @next/next/no-img-element
                   <img src={k.image_url} alt="" className="absolute inset-0 size-full object-cover" />
                 )}
-                {k.badge && <span className="absolute left-3 top-3 rounded-full bg-red px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-white">{k.badge}</span>}
+                {k.badge && <span className="absolute left-3 top-3 bg-red px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-white">{k.badge}</span>}
               </div>
               <div className="p-4">
                 <div className="flex items-start justify-between gap-3">
@@ -147,7 +147,7 @@ function KitEditor({ kit, onClose, onSaved, onDeleted }: { kit: Kit | "new" | nu
         </Field>
         <div className="grid grid-cols-2 gap-3">
           <Field label="Preço do kit"><Input inputMode="decimal" value={price} onChange={(e) => setPrice(e.target.value)} placeholder="0,00" className="tabular font-semibold" /></Field>
-          <Field label="Preço “de” (opcional)" hint="Aparece riscado"><Input inputMode="decimal" value={old} onChange={(e) => setOld(e.target.value)} placeholder="—" className="tabular" /></Field>
+          <Field label="Preço “de” (opcional)" hint="Aparece riscado"><Input inputMode="decimal" value={old} onChange={(e) => setOld(e.target.value)} placeholder="opcional" className="tabular" /></Field>
         </div>
         <div className="grid grid-cols-2 gap-3">
           <Field label="Selo"><Input value={d.badge ?? ""} onChange={(e) => setD((x) => ({ ...x, badge: e.target.value }))} placeholder="Ex.: Toda quarta" maxLength={22} /></Field>

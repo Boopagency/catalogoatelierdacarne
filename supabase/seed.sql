@@ -1,9 +1,9 @@
--- Gerado por scripts/build-seed-sql.mjs — não edite à mão.
+-- Gerado por scripts/build-seed-sql.mjs. Não edite à mão.
 
 begin;
 
 insert into public.settings (id, store_name, tagline, whatsapp, phone_display, instagram, address, maps_url, hours, pickup_enabled, delivery_enabled, delivery_note, announcement)
-values (1, 'Atelier da Carne', 'Carnes de qualidade e cortes especiais', '5541996752749', '(41) 99675-2749', 'atelierdacarne4', 'Rua Maranhão, 1710 — Portão, Curitiba/PR', 'https://maps.google.com/?q=Rua+Maranh%C3%A3o,+1710+-+Port%C3%A3o,+Curitiba+-+PR', '[{"days":[1,2,3,4,5],"open":"09:00","close":"19:30"},{"days":[6],"open":"09:00","close":"18:00"}]'::jsonb, true, true, 'A taxa de entrega é combinada pelo WhatsApp conforme o bairro.', 'Encomende pelo catálogo e retire sem fila — ou receba em casa.')
+values (1, 'Atelier da Carne', 'Carnes de qualidade e cortes especiais', '5541996752749', '(41) 99675-2749', 'atelierdacarne4', 'Rua Maranhão, 1710, Portão, Curitiba/PR', 'https://maps.google.com/?q=Rua+Maranh%C3%A3o,+1710+-+Port%C3%A3o,+Curitiba+-+PR', '[{"days":[1,2,3,4,5],"open":"09:00","close":"19:30"},{"days":[6],"open":"09:00","close":"18:00"}]'::jsonb, true, true, 'A taxa de entrega é combinada pelo WhatsApp conforme o bairro.', 'Encomende pelo catálogo e retire sem fila, ou receba em casa.')
 on conflict (id) do nothing;
 
 insert into public.categories (slug, name, subtitle, animal, cover_url, sort_order)
@@ -11,7 +11,7 @@ values ('bovinos-premium', 'Bovinos Premium', 'Cortes nobres para grelha, parril
 on conflict (slug) do nothing;
 
 insert into public.products (category_id, slug, name, description, unit, price, animal, cut_regions, prep_tags, badge, featured, sort_order)
-select id, 'ancho-black', 'Ancho Black', 'Miolo da costela com marmoreio intenso. Suculento, macio e cheio de sabor — o queridinho de quem entende de churrasco.', 'kg', 69.99, 'bovino', array['ancho']::text[], array['Grelha', 'Parrilla']::text[], 'Black', true, 0
+select id, 'ancho-black', 'Ancho Black', 'Miolo da costela com marmoreio intenso. Suculento, macio e cheio de sabor. O queridinho de quem entende de churrasco.', 'kg', 69.99, 'bovino', array['ancho']::text[], array['Grelha', 'Parrilla']::text[], 'Black', true, 0
 from public.categories where slug = 'bovinos-premium'
 on conflict (slug) do nothing;
 
@@ -190,7 +190,7 @@ from public.categories where slug = 'bovinos'
 on conflict (slug) do nothing;
 
 insert into public.categories (slug, name, subtitle, animal, cover_url, sort_order)
-values ('suinos', 'Suínos', 'Do lombo ao pernil — inclusive recheados da casa', 'suino', '/categorias/suinas.webp', 2)
+values ('suinos', 'Suínos', 'Do lombo ao pernil, inclusive os recheados da casa', 'suino', '/categorias/suinas.webp', 2)
 on conflict (slug) do nothing;
 
 insert into public.products (category_id, slug, name, description, unit, price, animal, cut_regions, prep_tags, badge, featured, sort_order)
@@ -274,7 +274,7 @@ from public.categories where slug = 'suinos'
 on conflict (slug) do nothing;
 
 insert into public.products (category_id, slug, name, description, unit, price, animal, cut_regions, prep_tags, badge, featured, sort_order)
-select id, 'panceta-suina-recheada', 'Panceta Suína Recheada', 'Panceta enrolada e recheada na casa — pele pururuca, interior suculento.', 'kg', 49.90, 'suino', array['barriga']::text[], array['Forno']::text[], 'Recheado', false, 16
+select id, 'panceta-suina-recheada', 'Panceta Suína Recheada', 'Panceta enrolada e recheada na casa. Pele pururuca, interior suculento.', 'kg', 49.90, 'suino', array['barriga']::text[], array['Forno']::text[], 'Recheado', false, 16
 from public.categories where slug = 'suinos'
 on conflict (slug) do nothing;
 
@@ -515,7 +515,7 @@ from public.categories where slug = 'espetinhos'
 on conflict (slug) do nothing;
 
 insert into public.kits (slug, name, tagline, items, price, old_price, image_url, badge, note, sort_order)
-values ('kit-semanal', 'Kit Semanal', 'A semana inteira resolvida', array['500 g Strogonoff de carne', '500 g Moída de patinho', '500 g Bife de patinho', '500 g Filé de peito de frango', '500 g Strogonoff de frango', '500 g Sobrepaleta suína']::text[], 139.90, null, '/categorias/bovinas-2.webp', 'Mais vendido', null, 0)
+values ('kit-semanal', 'Kit Semanal', 'A semana inteira resolvida', array['500 g Strogonoff de carne', '500 g Moída de patinho', '500 g Bife de patinho', '500 g Filé de peito de frango', '500 g Strogonoff de frango', '500 g Sobrepaleta suína']::text[], 139.90, null, '/categorias/suinas.webp', 'Mais vendido', null, 0)
 on conflict (slug) do nothing;
 
 insert into public.kits (slug, name, tagline, items, price, old_price, image_url, badge, note, sort_order)

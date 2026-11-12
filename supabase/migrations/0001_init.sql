@@ -1,4 +1,4 @@
--- Atelier da Carne — catálogo digital
+-- Atelier da Carne: catálogo digital
 -- Schema, segurança (RLS), funções de pedido e storage.
 
 create extension if not exists pgcrypto;

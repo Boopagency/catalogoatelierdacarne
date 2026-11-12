@@ -3,7 +3,7 @@ import { createClient } from "@supabase/supabase-js";
 import { cookies } from "next/headers";
 import { SUPABASE_ANON_KEY, SUPABASE_URL } from "./config";
 
-/** Cliente com a sessão do usuário (cookies) — usado no portal. */
+/** Cliente com a sessão do usuário (cookies), usado no portal. */
 export async function supabaseServer() {
   const store = await cookies();
   return createServerClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
@@ -20,7 +20,7 @@ export async function supabaseServer() {
   });
 }
 
-/** Cliente anônimo sem cookies — usado para ler o catálogo público (permite cache). */
+/** Cliente anônimo sem cookies, usado para ler o catálogo público (permite cache). */
 export function supabasePublic() {
   return createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
     auth: { persistSession: false, autoRefreshToken: false },

@@ -16,6 +16,9 @@ function nowInSaoPaulo() {
   return { day, minutes };
 }
 
+/** "09:00" vira "9h", "19:30" vira "19h30" */
+const hm = (t: string) => t.replace(/^0/, "").replace(":00", "h").replace(":", "h");
+
 const toMin = (hhmm: string) => {
   const [h, m] = hhmm.split(":").map(Number);
   return h * 60 + (m || 0);
@@ -25,7 +28,7 @@ export function openStatus(hours: Settings["hours"]) {
   const { day, minutes } = nowInSaoPaulo();
   const today = hours.find((h) => h.days.includes(day));
   if (today && minutes >= toMin(today.open) && minutes < toMin(today.close)) {
-    return { open: true, label: `Aberto agora · até ${today.close.replace(":00", "h").replace(":", "h")}` };
+    return { open: true, label: `Aberto até ${hm(today.close)}` };
   }
   // próxima abertura
   for (let i = 0; i < 7; i++) {
@@ -34,7 +37,7 @@ export function openStatus(hours: Settings["hours"]) {
     if (!slot) continue;
     if (i === 0 && minutes >= toMin(slot.open)) continue;
     const when = i === 0 ? "hoje" : i === 1 ? "amanhã" : DAY_SHORT[d].toLowerCase();
-    return { open: false, label: `Fechado · abre ${when} às ${slot.open.replace(":00", "h").replace(":", "h")}` };
+    return { open: false, label: `Fechado, abre ${when} às ${hm(slot.open)}` };
   }
   return { open: false, label: "Fechado" };
 }
@@ -47,8 +50,7 @@ export function hoursSummary(hours: Settings["hours"]) {
       days.length > 2 && contiguous
         ? `${DAY_SHORT[days[0]]} a ${DAY_SHORT[days[days.length - 1]]}`
         : days.map((d) => DAY_SHORT[d]).join(", ");
-    const f = (t: string) => t.replace(":00", "h").replace(":", "h");
-    return `${label} · ${f(h.open)}–${f(h.close)}`;
+    return `${label} · ${hm(h.open)} às ${hm(h.close)}`;
   });
 }
 

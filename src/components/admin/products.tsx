@@ -101,7 +101,7 @@ export function ProductsPage() {
             <button
               key={c.id}
               onClick={() => setCat(c.id)}
-              className={`h-8 shrink-0 rounded-full border px-3 text-[13px] transition ${cat === c.id ? "border-ink bg-ink text-bg" : "border-line-strong text-ink-2 hover:text-ink"}`}
+              className={`h-8 shrink-0 border px-3 text-[13px] transition ${cat === c.id ? "border-ink bg-ink text-bg" : "border-line-strong text-ink-2 hover:text-ink"}`}
             >
               {c.name}
             </button>
@@ -231,12 +231,12 @@ function ProductRow({
       <button
         onClick={() => onPatch(p, { featured: !p.featured })}
         aria-label="Destaque"
-        className={`hidden size-9 place-items-center rounded-full transition md:grid ${p.featured ? "text-warn" : "text-muted hover:text-ink"}`}
+        className={`hidden size-9 place-items-center transition md:grid ${p.featured ? "text-warn" : "text-muted hover:text-ink"}`}
         title="Destaque"
       >
         <Star className="size-[18px]" fill={p.featured ? "currentColor" : "none"} />
       </button>
-      <button onClick={onEdit} aria-label="Editar" className="hidden size-9 place-items-center rounded-full text-muted transition hover:bg-surface-3 hover:text-ink md:grid">
+      <button onClick={onEdit} aria-label="Editar" className="hidden size-9 place-items-center text-muted transition hover:bg-surface-3 hover:text-ink md:grid">
         <Pencil className="size-4" />
       </button>
     </div>
@@ -377,13 +377,13 @@ function ProductEditor({
                 <Input inputMode="decimal" value={price} onChange={(e) => setPrice(e.target.value)} placeholder="0,00" className="tabular font-semibold" />
               </Field>
               <Field label="Promoção (opcional)" hint="Aparece riscando o preço normal">
-                <Input inputMode="decimal" value={promo} onChange={(e) => setPromo(e.target.value)} placeholder="—" className="tabular" />
+                <Input inputMode="decimal" value={promo} onChange={(e) => setPromo(e.target.value)} placeholder="sem promoção" className="tabular" />
               </Field>
             </div>
             <div className="flex items-center justify-between rounded-2xl border border-line bg-bg-2/60 px-4 py-3">
               <div>
                 <p className="text-sm font-medium text-ink">Disponível hoje</p>
-                <p className="text-xs text-muted">Desligue quando acabar — aparece como esgotado</p>
+                <p className="text-xs text-muted">Desligue quando acabar. Aparece como esgotado.</p>
               </div>
               <Switch checked={d.available} onChange={(v) => set({ available: v })} />
             </div>
@@ -391,7 +391,7 @@ function ProductEditor({
               <Input value={d.badge ?? ""} onChange={(e) => set({ badge: e.target.value })} placeholder="Ex.: Mais pedido" maxLength={20} />
               <div className="mt-2 flex flex-wrap gap-1.5">
                 {BADGES.map((b) => (
-                  <button type="button" key={b} onClick={() => set({ badge: d.badge === b ? null : b })} className={`rounded-full border px-2.5 py-1 text-xs ${d.badge === b ? "border-tan bg-tan/15 text-ink" : "border-line-strong text-muted hover:text-ink"}`}>
+                  <button type="button" key={b} onClick={() => set({ badge: d.badge === b ? null : b })} className={`border px-2.5 py-1 text-xs ${d.badge === b ? "border-tan bg-tan/15 text-ink" : "border-line-strong text-muted hover:text-ink"}`}>
                     {b}
                   </button>
                 ))}
@@ -404,7 +404,7 @@ function ProductEditor({
               <Input value={tags} onChange={(e) => setTags(e.target.value)} placeholder="Churrasco, Grelha" />
               <div className="mt-2 flex flex-wrap gap-1.5">
                 {TAGS.filter((t) => !tags.toLowerCase().includes(t.toLowerCase())).map((t) => (
-                  <button type="button" key={t} onClick={() => setTags((x) => (x.trim() ? `${x.replace(/,\s*$/, "")}, ${t}` : t))} className="rounded-full border border-dashed border-line-strong px-2.5 py-1 text-xs text-muted hover:text-ink">
+                  <button type="button" key={t} onClick={() => setTags((x) => (x.trim() ? `${x.replace(/,\s*$/, "")}, ${t}` : t))} className="border border-dashed border-line-strong px-2.5 py-1 text-xs text-muted hover:text-ink">
                     + {t}
                   </button>
                 ))}
@@ -430,7 +430,7 @@ function ProductEditor({
                     {Object.entries(ANATOMY[d.animal].labels)
                       .filter(([id]) => !["pescoco", "dorso"].includes(id) && (id !== "cabeca" || d.animal === "suino"))
                       .map(([id, label]) => (
-                        <button type="button" key={id} onClick={() => toggleRegion(id)} className={`rounded-full border px-2.5 py-1 text-xs transition ${d.cut_regions.includes(id) ? "border-red bg-red/20 text-ink" : "border-line-strong text-muted hover:text-ink"}`}>
+                        <button type="button" key={id} onClick={() => toggleRegion(id)} className={`border px-2.5 py-1 text-xs transition ${d.cut_regions.includes(id) ? "border-red bg-red/20 text-ink" : "border-line-strong text-muted hover:text-ink"}`}>
                           {label.split(" · ")[0]}
                         </button>
                       ))}
@@ -504,7 +504,7 @@ function BulkAdjust({
         <div>
           <p className="text-[10px] font-semibold uppercase tracking-[0.26em] text-tan">Ferramenta</p>
           <h2 className="font-display mt-1 text-2xl font-semibold text-ink">Reajuste em massa</h2>
-          <p className="mt-1 text-sm text-muted">Aumente ou reduza vários preços de uma vez — por exemplo, quando o fornecedor reajustar.</p>
+          <p className="mt-1 text-sm text-muted">Aumente ou reduza vários preços de uma vez, por exemplo quando o fornecedor reajustar.</p>
         </div>
         <div className="grid grid-cols-2 gap-3">
           <Field label="Categoria">
@@ -526,7 +526,7 @@ function BulkAdjust({
             <div key={p.id} className="flex justify-between gap-3 border-b border-line px-4 py-2 text-sm last:border-0">
               <span className="truncate text-ink-2">{p.name}</span>
               <span className="tabular shrink-0 text-muted">
-                {brl(p.price)} → <span className="font-semibold text-ink">{Number.isFinite(n) ? brl(calc(p.price)) : "—"}</span>
+                {brl(p.price)} → <span className="font-semibold text-ink">{Number.isFinite(n) ? brl(calc(p.price)) : "?"}</span>
               </span>
             </div>
           ))}

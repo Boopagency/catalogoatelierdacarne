@@ -52,7 +52,7 @@ function templateFor(o: Order, status: OrderStatus, address: string | null) {
   const t: Partial<Record<OrderStatus, string>> = {
     confirmado: `Olá, ${first}! Seu pedido #${o.number} foi confirmado ✅ Já vamos separar seus cortes.\n\nAcompanhe: ${track}`,
     separando: `Olá, ${first}! Estamos separando seu pedido #${o.number} agora 🔪\n\nAcompanhe: ${track}`,
-    pronto: `Olá, ${first}! Seu pedido #${o.number} está pronto para retirada${address ? ` na ${address.split("—")[0].trim()}` : ""}. Te esperamos! 🥩`,
+    pronto: `Olá, ${first}! Seu pedido #${o.number} está pronto para retirada${address ? ` na ${address.split(",").slice(0, 2).join(",").trim()}` : ""}. Te esperamos! 🥩`,
     em_rota: `Olá, ${first}! Seu pedido #${o.number} saiu para entrega 🛵\n\nAcompanhe: ${track}`,
     concluido: `Obrigado pela preferência, ${first}! Bom apetite e até a próxima 🔥`,
   };
@@ -192,9 +192,9 @@ export function OrdersPage() {
               <button
                 key={c.id}
                 onClick={() => setMobileCol(c.id)}
-                className={`inline-flex h-9 shrink-0 items-center gap-2 rounded-full border px-3.5 text-sm transition ${mobileCol === c.id ? "border-ink bg-ink text-bg" : "border-line-strong text-ink-2"}`}
+                className={`inline-flex h-9 shrink-0 items-center gap-2 border px-3.5 text-sm transition ${mobileCol === c.id ? "border-ink bg-ink text-bg" : "border-line-strong text-ink-2"}`}
               >
-                <span className={`size-2 rounded-full ${c.tone}`} /> {c.label}
+                <span className={`size-2 ${c.tone}`} /> {c.label}
                 <span className="tabular text-xs opacity-60">{openCount(c.statuses)}</span>
               </button>
             ))}
@@ -205,7 +205,7 @@ export function OrdersPage() {
               return (
                 <section key={c.id} className={`${mobileCol === c.id ? "" : "hidden"} lg:block`}>
                   <header className="mb-3 hidden items-center gap-2 px-1 lg:flex">
-                    <span className={`size-2 rounded-full ${c.tone}`} />
+                    <span className={`size-2 ${c.tone}`} />
                     <h2 className="text-sm font-semibold text-ink">{c.label}</h2>
                     <span className="tabular text-xs text-muted">{list.length}</span>
                   </header>
@@ -255,17 +255,17 @@ function OrderCard({ order: o, onOpen, onAdvance }: { order: Order; onOpen: () =
         </div>
       </div>
       <div className="mt-3 flex flex-wrap gap-1.5 text-xs">
-        <span className="inline-flex items-center gap-1 rounded-full bg-surface-3 px-2 py-1 text-ink-2">
+        <span className="inline-flex items-center gap-1 bg-surface-3 px-2 py-1 text-ink-2">
           {o.fulfillment === "entrega" ? <Bike className="size-3" /> : <Store className="size-3" />}
           {o.fulfillment === "entrega" ? o.neighborhood || "Entrega" : "Retirada"}
         </span>
         {o.scheduled_for && (
-          <span className="inline-flex items-center gap-1 rounded-full bg-surface-3 px-2 py-1 text-ink-2">
+          <span className="inline-flex items-center gap-1 bg-surface-3 px-2 py-1 text-ink-2">
             <CalendarClock className="size-3" /> {o.scheduled_for}
           </span>
         )}
-        {!OPEN.includes(o.status) && <span className={`rounded-full border px-2 py-0.5 ${STATUS_TONE[o.status]}`}>{STATUS_LABEL[o.status]}</span>}
-        {o.status === "em_rota" && <span className={`rounded-full border px-2 py-0.5 ${STATUS_TONE[o.status]}`}>Em rota</span>}
+        {!OPEN.includes(o.status) && <span className={`border px-2 py-0.5 ${STATUS_TONE[o.status]}`}>{STATUS_LABEL[o.status]}</span>}
+        {o.status === "em_rota" && <span className={`border px-2 py-0.5 ${STATUS_TONE[o.status]}`}>Em rota</span>}
       </div>
       <p className="mt-3 line-clamp-2 text-[13px] leading-relaxed text-muted">
         {items.map((i) => `${formatQty(Number(i.quantity), i.unit)} ${i.name}`).join(" · ")}
@@ -305,7 +305,7 @@ function OrderDetail({
         <>
           <div className="border-b border-line px-5 pb-4 pt-4 md:pt-6">
             <div className="flex items-center gap-2">
-              <span className={`rounded-full border px-2.5 py-0.5 text-xs font-medium ${STATUS_TONE[o.status]}`}>{STATUS_LABEL[o.status]}</span>
+              <span className={`border px-2.5 py-0.5 text-xs font-medium ${STATUS_TONE[o.status]}`}>{STATUS_LABEL[o.status]}</span>
               <span className="text-xs text-muted">{dateTime(o.created_at)}</span>
             </div>
             <h2 className="tabular font-display mt-2 text-3xl font-semibold text-ink">Pedido #{o.number}</h2>
@@ -319,7 +319,7 @@ function OrderDetail({
               <div className="mt-3 space-y-1.5 text-sm text-ink-2">
                 <p className="flex items-start gap-2">
                   {o.fulfillment === "entrega" ? <MapPin className="mt-0.5 size-4 shrink-0 text-red-bright" /> : <Store className="mt-0.5 size-4 shrink-0 text-red-bright" />}
-                  {o.fulfillment === "entrega" ? `${o.address ?? ""}${o.neighborhood ? ` — ${o.neighborhood}` : ""}` : "Retirada na loja"}
+                  {o.fulfillment === "entrega" ? `${o.address ?? ""}${o.neighborhood ? `, ${o.neighborhood}` : ""}` : "Retirada na loja"}
                 </p>
                 {o.scheduled_for && <p className="flex items-center gap-2"><CalendarClock className="size-4 text-muted" /> {o.scheduled_for}</p>}
                 {o.payment_method && <p className="flex items-center gap-2"><CreditCard className="size-4 text-muted" /> {o.payment_method}</p>}
