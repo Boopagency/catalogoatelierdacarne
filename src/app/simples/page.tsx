@@ -9,12 +9,14 @@ export default async function Simples() {
   const sections = [
     ...c.categories.map((cat) => ({
       name: cat.name,
+      cover: cat.cover_url,
       items: cat.products
         .filter((p) => p.available)
         .map((p) => ({ id: p.id, name: p.name, price: p.promo_price ?? p.price, unit: p.unit as string })),
     })),
     {
       name: "Kits",
+      cover: null,
       items: c.kits.filter((k) => k.available).map((k) => ({ id: "kit-" + k.id, name: k.name, price: k.price, unit: "kit" })),
     },
   ].filter((s) => s.items.length);

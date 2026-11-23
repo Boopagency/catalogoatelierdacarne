@@ -1,18 +1,22 @@
 "use client";
 import { useState } from "react";
+import { Minus, Plus } from "lucide-react";
 import { brl } from "@/lib/format";
 import { waLink } from "@/lib/whatsapp";
+import { Wordmark } from "@/components/ui/logo";
+import { WhatsAppIcon } from "@/components/ui/icons";
 
 type Item = { id: string; name: string; price: number; unit: string };
+type Section = { name: string; cover: string | null; items: Item[] };
 
 const step = (u: string) => (u === "kg" ? 0.5 : 1);
 const qtyText = (q: number, u: string) =>
   u === "kg" ? `${q.toLocaleString("pt-BR")} kg` : `${q} ${u === "kit" ? "kit" : "un"}`;
+const unitText = (u: string) => (u === "kg" ? "/kg" : u === "un" ? "/un" : "");
 
-export function SimpleCatalog(props: { storeName: string; whatsapp: string; sections: { name: string; items: Item[] }[] }) {
+export function SimpleCatalog(props: { storeName: string; whatsapp: string; sections: Section[] }) {
   const [qty, setQty] = useState<Record<string, number>>({});
-  const all = props.sections.flatMap((s) => s.items);
-  const chosen = all.filter((i) => qty[i.id] > 0);
+  const chosen = props.sections.flatMap((s) => s.items).filter((i) => qty[i.id] > 0);
   const total = chosen.reduce((t, i) => t + i.price * qty[i.id], 0);
 
   const change = (i: Item, dir: 1 | -1) =>
@@ -27,51 +31,74 @@ export function SimpleCatalog(props: { storeName: string; whatsapp: string; sect
   ].join("\n");
 
   return (
-    <main className="mx-auto max-w-2xl bg-white px-4 pb-40 pt-6 text-[20px] text-black">
-      <h1 className="text-center text-3xl font-bold">{props.storeName}</h1>
-      <p className="mt-2 text-center">Toque em <b>+</b> para adicionar. Depois envie pelo WhatsApp.</p>
+    <>
+      <header className="sticky top-0 z-40 border-b border-line bg-bg">
+        <div className="mx-auto flex h-14 max-w-3xl items-center px-4">
+          <Wordmark />
+        </div>
+      </header>
 
-      {props.sections.map((s) => (
-        <section key={s.name} className="mt-8">
-          <h2 className="border-b-4 border-black pb-1 text-2xl font-bold">{s.name}</h2>
-          <ul>
-            {s.items.map((i) => {
-              const q = qty[i.id] ?? 0;
-              return (
-                <li key={i.id} className="flex items-center gap-3 border-b border-neutral-300 py-3">
-                  <div className="flex-1">
-                    <div className="font-semibold">{i.name}</div>
-                    <div>
-                      {brl(i.price)}
-                      {i.unit === "kg" ? " o kg" : i.unit === "un" ? " a unidade" : ""}
+      <main className="relative z-10 mx-auto max-w-3xl px-4 pb-40">
+        <p className="sign pt-8 text-[14px] font-semibold text-tan">Catálogo de produtos · Preço do dia</p>
+        <p className="mt-2 text-[18px] leading-relaxed text-ink-2">
+          Toque em <b className="text-ink">+</b> nos cortes que quiser. No fim, envie o pedido pelo WhatsApp.
+        </p>
+
+        {props.sections.map((s) => (
+          <section key={s.name} className="mt-10">
+            {s.cover ? (
+              <div className="relative h-28 overflow-hidden border border-line">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={s.cover} alt="" className="absolute inset-0 size-full object-cover" />
+                <div className="absolute inset-0 bg-gradient-to-r from-black/85 to-black/20" />
+                <h2 className="sign absolute bottom-3 left-4 text-[34px] font-black leading-none text-white">{s.name}</h2>
+              </div>
+            ) : (
+              <h2 className="sign border-b border-line-strong pb-2 text-[34px] font-black leading-none">{s.name}</h2>
+            )}
+            <ul>
+              {s.items.map((i) => {
+                const q = qty[i.id] ?? 0;
+                return (
+                  <li key={i.id} className={`flex items-center gap-3 border-b border-line py-4 ${q ? "bg-surface -mx-4 px-4" : ""}`}>
+                    <div className="min-w-0 flex-1">
+                      <h3 className="sign text-[21px] font-bold leading-tight text-ink">{i.name}</h3>
+                      <p className="tabular mt-1 text-[18px] text-ink-2">
+                        {brl(i.price)}<span className="text-muted">{unitText(i.unit)}</span>
+                      </p>
                     </div>
-                  </div>
-                  {q > 0 && (
-                    <>
-                      <button aria-label={`Tirar ${i.name}`} onClick={() => change(i, -1)} className="h-12 w-12 rounded-full border-2 border-black text-2xl font-bold">−</button>
-                      <span className="min-w-16 text-center font-bold">{qtyText(q, i.unit)}</span>
-                    </>
-                  )}
-                  <button aria-label={`Adicionar ${i.name}`} onClick={() => change(i, 1)} className="h-12 w-12 rounded-full bg-red-700 text-3xl font-bold text-white">+</button>
-                </li>
-              );
-            })}
-          </ul>
-        </section>
-      ))}
+                    {q > 0 && (
+                      <>
+                        <button aria-label={`Tirar ${i.name}`} onClick={() => change(i, -1)} className="focus-ring grid size-12 place-items-center border border-line-strong text-ink">
+                          <Minus className="size-5" />
+                        </button>
+                        <span className="sign tabular min-w-14 text-center text-[18px] font-bold">{qtyText(q, i.unit)}</span>
+                      </>
+                    )}
+                    <button aria-label={`Adicionar ${i.name}`} onClick={() => change(i, 1)} className="focus-ring grid size-12 place-items-center bg-red text-white transition active:bg-red-bright">
+                      <Plus className="size-6" />
+                    </button>
+                  </li>
+                );
+              })}
+            </ul>
+          </section>
+        ))}
+      </main>
 
       {chosen.length > 0 && (
-        <div className="fixed inset-x-0 bottom-0 border-t-2 border-black bg-white p-4">
+        <div className="fixed inset-x-0 bottom-0 z-40 border-t border-line bg-bg p-4">
           <a
             href={waLink(props.whatsapp, message)}
             target="_blank"
             rel="noopener"
-            className="mx-auto block max-w-2xl rounded-xl bg-green-700 py-4 text-center text-xl font-bold text-white"
+            className="sign mx-auto flex max-w-3xl items-center justify-center gap-3 bg-red py-4 text-[19px] font-bold text-white transition hover:bg-red-bright"
           >
-            Enviar pedido pelo WhatsApp ({chosen.length} {chosen.length === 1 ? "item" : "itens"} · {brl(total)})
+            <WhatsAppIcon className="size-5" />
+            Enviar pedido · {chosen.length} {chosen.length === 1 ? "item" : "itens"} · {brl(total)}
           </a>
         </div>
       )}
-    </main>
+    </>
   );
 }
