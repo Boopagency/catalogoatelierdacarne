@@ -547,7 +547,6 @@ function Footer({ settings }: { settings: Catalog["settings"] }) {
         </div>
         <div className="flex flex-wrap items-center justify-between gap-3 border-t border-line py-5 text-[13px] italic text-muted">
           <span>Produtos por quilo são pesados na hora. Fotos ilustrativas.</span>
-          <a href="/admin" className="sign not-italic font-semibold hover:text-ink">Portal da loja</a>
         </div>
       </div>
     </footer>
