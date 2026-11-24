@@ -99,12 +99,24 @@ export function catalogFromRows(base: Catalog, produtos: string[][], kits: strin
   return { ...base, categories, kits: kitList };
 }
 
+/** Aceita o link como vier do Google (/pubhtml, /pub?output=csv, /edit...) e devolve a base /pub. */
+export function sheetBase(url: string) {
+  const u = url.trim().split(/[?#]/)[0].replace(/\/(pubhtml|pub|edit|htmlview)\/?$/, "");
+  return `${u}/pub`;
+}
+
+/** Só aceita CSV cuja primeira coluna do cabeçalho é a esperada; senão é página de erro do Google. */
+export function checkHeader(rows: string[][], first: string) {
+  if (rows[0]?.[0]?.trim().toLowerCase() !== first) throw new Error(`Aba sem o cabeçalho "${first}": link da planilha errado?`);
+  return rows;
+}
+
 export async function getSheetCatalog(url: string, base: Catalog): Promise<Catalog> {
-  const get = async (gid: number) => {
-    const res = await fetch(`${url}?gid=${gid}&single=true&output=csv`, { next: { revalidate: 60 } });
+  const get = async (gid: number, first: string) => {
+    const res = await fetch(`${sheetBase(url)}?gid=${gid}&single=true&output=csv`, { next: { revalidate: 60 } });
     if (!res.ok) throw new Error(`Planilha respondeu ${res.status}`);
-    return parseCsv(await res.text());
+    return checkHeader(parseCsv(await res.text()), first);
   };
-  const [produtos, kits] = await Promise.all([get(0), get(1)]);
+  const [produtos, kits] = await Promise.all([get(0, "categoria"), get(1, "kit")]);
   return catalogFromRows(base, produtos, kits);
 }
