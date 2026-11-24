@@ -1,4 +1,4 @@
-import type { OrderStatus, Unit } from "./types";
+import type { Unit } from "./types";
 
 const brlFmt = new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" });
 export const brl = (n: number) => brlFmt.format(n).replace(/ /g, " ");
@@ -13,7 +13,6 @@ export function formatQty(qty: number, unit: Unit | "kit") {
   return `${num(qty)} kg`;
 }
 
-export const unitSuffix = (unit: Unit) => (unit === "kg" ? "/kg" : "/un");
 
 export const effectivePrice = (p: { price: number; promo_price: number | null }) =>
   p.promo_price !== null && p.promo_price < p.price ? p.promo_price : p.price;
@@ -54,33 +53,4 @@ export function maskPhoneInput(v: string) {
   if (d.length <= 6) return `(${d.slice(0, 2)}) ${d.slice(2)}`;
   if (d.length <= 10) return `(${d.slice(0, 2)}) ${d.slice(2, 6)}-${d.slice(6)}`;
   return `(${d.slice(0, 2)}) ${d.slice(2, 7)}-${d.slice(7)}`;
-}
-
-export const STATUS_LABEL: Record<OrderStatus, string> = {
-  novo: "Recebido",
-  confirmado: "Confirmado",
-  separando: "Separando",
-  pronto: "Pronto",
-  em_rota: "Saiu para entrega",
-  concluido: "Concluído",
-  cancelado: "Cancelado",
-};
-
-export function timeAgo(iso: string) {
-  const diff = (Date.now() - new Date(iso).getTime()) / 1000;
-  if (diff < 60) return "agora";
-  if (diff < 3600) return `há ${Math.floor(diff / 60)} min`;
-  if (diff < 86400) return `há ${Math.floor(diff / 3600)} h`;
-  const d = Math.floor(diff / 86400);
-  return d === 1 ? "ontem" : `há ${d} dias`;
-}
-
-export function dateTime(iso: string) {
-  return new Intl.DateTimeFormat("pt-BR", {
-    timeZone: "America/Sao_Paulo",
-    day: "2-digit",
-    month: "2-digit",
-    hour: "2-digit",
-    minute: "2-digit",
-  }).format(new Date(iso));
 }

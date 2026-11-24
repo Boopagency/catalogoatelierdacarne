@@ -11,14 +11,11 @@ export function buildOrderMessage(opts: {
   lines: CartLine[];
   total: number;
   info: CheckoutInfo;
-  number?: number | null;
-  code: string;
-  trackUrl?: string;
 }) {
   const { lines, total, info } = opts;
   const hasKg = lines.some((l) => l.unit === "kg");
   const out: string[] = [];
-  out.push(`*Pedido ${opts.number ? `#${opts.number}` : opts.code} · ${opts.storeName}*`);
+  out.push(`*Pedido · ${opts.storeName}*`);
   out.push("");
   out.push("*Itens*");
   for (const l of lines) {
@@ -40,9 +37,5 @@ export function buildOrderMessage(opts: {
   if (info.when.trim()) out.push(`*Quando:* ${info.when.trim()}`);
   if (info.payment) out.push(`*Pagamento:* ${info.payment}`);
   if (info.notes.trim()) out.push(`*Observações:* ${info.notes.trim()}`);
-  if (opts.trackUrl) {
-    out.push("");
-    out.push(`Acompanhar pedido: ${opts.trackUrl}`);
-  }
   return out.join("\n");
 }

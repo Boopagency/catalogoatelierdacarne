@@ -9,11 +9,9 @@ type Props = {
   variant?: "full" | "mini";
   className?: string;
   title?: string;
-  /** Torna as regiões clicáveis (usado no portal para escolher o corte). */
-  onToggle?: (region: string) => void;
 };
 
-export function CutDiagram({ animal, regions = [], variant = "full", className, title, onToggle }: Props) {
+export function CutDiagram({ animal, regions = [], variant = "full", className, title }: Props) {
   const art = ANATOMY[animal];
   const raw = useId().replace(/:/g, "");
   const clipId = `clip-${raw}`;
@@ -23,10 +21,6 @@ export function CutDiagram({ animal, regions = [], variant = "full", className, 
   const clipped = art.regions.filter((r) => (animal === "frango" ? r.clip === true : r.clip !== false));
   const overlay = art.regions.filter((r) => !clipped.includes(r));
 
-  const clickable = (id: string) =>
-    Boolean(onToggle) && (!["cabeca", "pescoco", "dorso"].includes(id) || (animal === "suino" && id === "cabeca"));
-  const interactive = (id: string) =>
-    clickable(id) ? { onClick: () => onToggle!(id), style: { cursor: "pointer" }, className: "transition-opacity hover:opacity-75" } : {};
   const regionFill = (id: string) => (active.has(id) ? `url(#${gradId})` : "var(--diagram-fill)");
 
   return (
@@ -59,11 +53,8 @@ export function CutDiagram({ animal, regions = [], variant = "full", className, 
             fill={regionFill(r.id)}
             stroke={active.has(r.id) ? "rgb(255 255 255 / 0.9)" : "var(--diagram-line)"}
             strokeWidth={active.has(r.id) ? (mini ? 2 : 1.25) : mini ? 1.5 : 1}
-            className={active.has(r.id) && !onToggle ? "cut-active" : undefined}
-            {...interactive(r.id)}
-          >
-            {onToggle && <title>{art.labels[r.id] ?? r.id}</title>}
-          </path>
+            className={active.has(r.id) ? "cut-active" : undefined}
+          />
         ))}
       </g>
 
@@ -96,11 +87,8 @@ export function CutDiagram({ animal, regions = [], variant = "full", className, 
           strokeWidth={mini ? 2 : 1.25}
           strokeDasharray={r.id === "miudos" && !active.has(r.id) ? "3 3" : undefined}
           strokeLinejoin="round"
-          className={active.has(r.id) && !onToggle ? "cut-active" : undefined}
-          {...interactive(r.id)}
-        >
-          {onToggle && <title>{art.labels[r.id] ?? r.id}</title>}
-        </path>
+          className={active.has(r.id) ? "cut-active" : undefined}
+        />
       ))}
 
       {art.extras.filter((e) => e.kind === "line").map((e, i) => (

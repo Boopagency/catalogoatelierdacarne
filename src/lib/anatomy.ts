@@ -159,9 +159,3 @@ export const ANIMAL_LABEL: Record<Animal, string> = { bovino: "Boi", suino: "Por
 export function regionLabel(animal: Animal, id: string) {
   return ANATOMY[animal].labels[id] ?? id;
 }
-
-export function regionOptions(animal: Animal) {
-  return Object.entries(ANATOMY[animal].labels)
-    .filter(([id]) => !["cabeca", "pescoco", "dorso"].includes(id) || animal === "suino")
-    .map(([id, label]) => ({ id, label }));
-}
