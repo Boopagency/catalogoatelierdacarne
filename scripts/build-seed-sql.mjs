@@ -42,8 +42,8 @@ on conflict (slug) do nothing;`
 
 data.kits.forEach((k, ki) => {
   out.push(
-    `insert into public.kits (slug, name, tagline, items, price, old_price, image_url, badge, note, sort_order)
-values (${q(slugify(k.name))}, ${q(k.name)}, ${q(k.tagline)}, ${arr(k.items)}, ${num(k.price)}, ${num(k.old_price)}, ${q(k.image)}, ${q(k.badge)}, ${q(k.note ?? null)}, ${ki})
+    `insert into public.kits (slug, name, tagline, items, price, old_price, promo_quarta, image_url, badge, note, sort_order)
+values (${q(slugify(k.name))}, ${q(k.name)}, ${q(k.tagline)}, ${arr(k.items)}, ${num(k.price)}, ${num(k.old_price)}, ${k.promo_quarta ? "true" : "false"}, ${q(k.image)}, ${q(k.badge)}, ${q(k.note ?? null)}, ${ki})
 on conflict (slug) do nothing;`
   );
 });

@@ -189,7 +189,7 @@
     {
       "name": "Quarta do Hambúrguer",
       "tagline": "Burger night completa para 6",
-      "price": 59.90,
+      "price": 69.9, "old_price": 79.9, "promo_quarta": true,
       "badge": "Toda quarta",
       "items": ["6 pães brioche", "6 hambúrgueres 150 g (fraldinha ou costela)", "6 fatias de queijo cheddar", "12 fatias de bacon", "1 sacola térmica"],
       "image": "/categorias/hamburgueres.webp"

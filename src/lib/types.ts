@@ -55,6 +55,7 @@ export type Kit = {
   items: string[];
   price: number;
   old_price: number | null;
+  promo_quarta: boolean; // "de/por" só vale às quartas; nos outros dias cobra o preço "de"
   image_url: string | null;
   badge: string | null;
   note: string | null;

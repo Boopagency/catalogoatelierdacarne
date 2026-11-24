@@ -49,14 +49,27 @@ export function catalogFromJson(): Catalog {
     tagline: k.tagline,
     items: k.items,
     price: k.price,
-    old_price: null,
+    old_price: (k as { old_price?: number }).old_price ?? null,
+    promo_quarta: Boolean((k as { promo_quarta?: boolean }).promo_quarta),
     image_url: k.image,
     badge: k.badge,
     note: (k as { note?: string }).note ?? null,
     available: true,
     sort_order: ki,
   }));
-  return { settings: raw.settings as Settings, categories, kits, live: false };
+  return applyWednesday({ settings: raw.settings as Settings, categories, kits, live: false });
+}
+
+/** Kit com promoção "só às quartas": nos outros dias volta ao preço "de" (horário de Brasília). */
+export function isWednesday() {
+  return new Intl.DateTimeFormat("en-US", { timeZone: "America/Sao_Paulo", weekday: "short" }).format(new Date()) === "Wed";
+}
+function applyWednesday(c: Catalog): Catalog {
+  if (isWednesday()) return c;
+  return {
+    ...c,
+    kits: c.kits.map((k) => (k.promo_quarta && k.old_price ? { ...k, price: k.old_price, old_price: null } : k)),
+  };
 }
 
 const num = (v: unknown) => (v === null || v === undefined ? null : Number(v));
@@ -78,7 +91,7 @@ export async function getCatalog(): Promise<Catalog> {
   const prods = (products.data ?? []).map(
     (p): Product => ({ ...p, price: Number(p.price), promo_price: num(p.promo_price) })
   );
-  return {
+  return applyWednesday({
     settings: (settings.data as Settings) ?? catalogFromJson().settings,
     categories: (categories.data ?? []).map((c) => ({
       ...c,
@@ -86,5 +99,5 @@ export async function getCatalog(): Promise<Catalog> {
     })),
     kits: (kits.data ?? []).map((k): Kit => ({ ...k, price: Number(k.price), old_price: num(k.old_price) })),
     live: true,
-  };
+  });
 }
