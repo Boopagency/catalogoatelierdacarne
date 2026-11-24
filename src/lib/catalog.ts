@@ -4,6 +4,7 @@ import type { Animal } from "./anatomy";
 import { slugify } from "./format";
 import { isSupabaseConfigured } from "./supabase/config";
 import { supabasePublic } from "./supabase/server";
+import { getSheetCatalog } from "./sheet";
 import type { Catalog, CategoryWithProducts, Kit, Product, Settings } from "./types";
 
 type RawProduct = {
@@ -12,6 +13,10 @@ type RawProduct = {
 
 /** Catálogo a partir do JSON (modo demonstração, sem Supabase). */
 export function catalogFromJson(): Catalog {
+  return applyWednesday(rawCatalog());
+}
+
+function rawCatalog(): Catalog {
   const categories: CategoryWithProducts[] = raw.categories.map((c, ci) => ({
     id: c.slug,
     slug: c.slug,
@@ -57,7 +62,7 @@ export function catalogFromJson(): Catalog {
     available: true,
     sort_order: ki,
   }));
-  return applyWednesday({ settings: raw.settings as Settings, categories, kits, live: false });
+  return { settings: raw.settings as Settings, categories, kits, live: false };
 }
 
 /** Kit com promoção "só às quartas": nos outros dias volta ao preço "de" (horário de Brasília). */
@@ -75,6 +80,8 @@ function applyWednesday(c: Catalog): Catalog {
 const num = (v: unknown) => (v === null || v === undefined ? null : Number(v));
 
 export async function getCatalog(): Promise<Catalog> {
+  const sheet = process.env.SHEET_URL;
+  if (sheet) return applyWednesday(await getSheetCatalog(sheet, rawCatalog()));
   if (!isSupabaseConfigured()) return catalogFromJson();
   const sb = supabasePublic();
   const [settings, categories, products, kits] = await Promise.all([
