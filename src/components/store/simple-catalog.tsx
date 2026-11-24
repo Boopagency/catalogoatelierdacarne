@@ -28,7 +28,7 @@ export function SimpleCatalog(props: { storeName: string; whatsapp: string; kits
   const all = [...props.kits, ...props.sections.flatMap((s) => s.items)];
   const chosen = all.filter((i) => qty[i.id] > 0);
   const total = chosen.reduce((t, i) => t + i.price * qty[i.id], 0);
-  const quarta = props.sections.flatMap((s) => s.items).filter((i) => i.quarta);
+  const quarta = props.kits.filter((i) => i.quarta);
 
   const change = (i: Item, dir: 1 | -1) =>
     setQty((q) => ({ ...q, [i.id]: Math.max(0, (q[i.id] ?? 0) + dir * step(i.unit)) }));
@@ -84,7 +84,7 @@ export function SimpleCatalog(props: { storeName: string; whatsapp: string; kits
 
         {quarta.length > 0 && (
           <p className="sign mt-6 bg-red px-4 py-3 text-[19px] font-bold text-white">
-            Quarta da carne: {quarta.length === 1 ? quarta[0].name : `${quarta.length} cortes`} com preço especial só hoje
+            Hoje é quarta: {quarta.map((k) => k.name).join(", ")} em promoção
           </p>
         )}
 
@@ -127,7 +127,6 @@ export function SimpleCatalog(props: { storeName: string; whatsapp: string; kits
               {s.items.map((i) => (
                 <li key={i.id} className={`flex items-center gap-3 border-b border-line py-4 ${qty[i.id] ? "-mx-4 bg-surface px-4" : ""}`}>
                   <div className="min-w-0 flex-1">
-                    {i.quarta && <span className="sign mb-1 inline-block bg-red px-1.5 py-0.5 text-[12px] font-bold text-white">Só hoje · Quarta</span>}
                     <h3 className="sign text-[21px] font-bold leading-tight text-ink">{i.name}</h3>
                     <Price i={i} />
                   </div>

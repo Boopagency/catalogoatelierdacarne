@@ -7,7 +7,7 @@ import { supabasePublic } from "./supabase/server";
 import type { Catalog, CategoryWithProducts, Kit, Product, Settings } from "./types";
 
 type RawProduct = {
-  n: string; p: number; u?: "kg" | "un"; r?: string[]; a?: Animal; d?: string; t?: string[]; b?: string; f?: boolean; pp?: number; q?: boolean;
+  n: string; p: number; u?: "kg" | "un"; r?: string[]; a?: Animal; d?: string; t?: string[]; b?: string; f?: boolean;
 };
 
 /** Catálogo a partir do JSON (modo demonstração, sem Supabase). */
@@ -30,8 +30,7 @@ export function catalogFromJson(): Catalog {
         description: p.d ?? null,
         unit: p.u ?? "kg",
         price: p.p,
-        promo_price: p.pp ?? null,
-        promo_quarta: Boolean(p.q),
+        promo_price: null,
         image_url: null,
         animal: p.a ?? (c.animal as Animal | null) ?? null,
         cut_regions: p.r ?? [],
@@ -50,7 +49,8 @@ export function catalogFromJson(): Catalog {
     tagline: k.tagline,
     items: k.items,
     price: k.price,
-    old_price: null,
+    old_price: (k as { old_price?: number }).old_price ?? null,
+    promo_quarta: Boolean((k as { promo_quarta?: boolean }).promo_quarta),
     image_url: k.image,
     badge: k.badge,
     note: (k as { note?: string }).note ?? null,
@@ -60,7 +60,7 @@ export function catalogFromJson(): Catalog {
   return applyWednesday({ settings: raw.settings as Settings, categories, kits, live: false });
 }
 
-/** Promoção marcada "só às quartas" some nos outros dias (horário de Brasília). */
+/** Kit com promoção "só às quartas": nos outros dias volta ao preço "de" (horário de Brasília). */
 export function isWednesday() {
   return new Intl.DateTimeFormat("en-US", { timeZone: "America/Sao_Paulo", weekday: "short" }).format(new Date()) === "Wed";
 }
@@ -68,10 +68,7 @@ function applyWednesday(c: Catalog): Catalog {
   if (isWednesday()) return c;
   return {
     ...c,
-    categories: c.categories.map((cat) => ({
-      ...cat,
-      products: cat.products.map((p) => (p.promo_quarta ? { ...p, promo_price: null } : p)),
-    })),
+    kits: c.kits.map((k) => (k.promo_quarta && k.old_price ? { ...k, price: k.old_price, old_price: null } : k)),
   };
 }
 

@@ -1,5 +1,5 @@
--- Promoção só às quartas: o preço promocional vale apenas na quarta (horário de Brasília).
-alter table public.products add column promo_quarta boolean not null default false;
+-- Kit com promoção só às quartas: na quarta cobra `price`; nos outros dias cobra `old_price` (horário de Brasília).
+alter table public.kits add column promo_quarta boolean not null default false;
 
 create or replace function public.place_order(payload jsonb)
 returns jsonb language plpgsql volatile security definer set search_path = '' as $$
@@ -76,7 +76,7 @@ begin
     end;
 
     if coalesce(v_item ->> 'type', 'product') = 'kit' then
-      select k.name, k.price into v_name_item, v_price
+      select k.name, case when k.promo_quarta and k.old_price is not null and extract(dow from now() at time zone 'America/Sao_Paulo') <> 3 then k.old_price else k.price end into v_name_item, v_price
         from public.kits k where k.id = v_ref and k.available;
       if not found then
         raise exception 'Um dos kits não está mais disponível. Atualize a página.' using errcode = '22023';
@@ -89,7 +89,7 @@ begin
       values (v_order_id, v_ref, v_name_item, v_unit, v_qty, v_price, round(v_price * v_qty, 2),
               left(nullif(btrim(coalesce(v_item ->> 'notes', '')), ''), 200), v_sort);
     else
-      select p.name, case when p.promo_quarta and extract(dow from now() at time zone 'America/Sao_Paulo') <> 3 then p.price else coalesce(p.promo_price, p.price) end, p.unit into v_name_item, v_price, v_unit
+      select p.name, coalesce(p.promo_price, p.price), p.unit into v_name_item, v_price, v_unit
         from public.products p
         join public.categories c on c.id = p.category_id
         where p.id = v_ref and p.available and c.active;

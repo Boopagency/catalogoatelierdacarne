@@ -8,7 +8,7 @@ export default async function Home() {
   const c = await getCatalog();
   const kits = c.kits
     .filter((k) => k.available)
-    .map((k) => ({ id: "kit-" + k.id, name: k.name, price: k.price, was: k.old_price, unit: "kit", details: k.items, badge: k.badge }));
+    .map((k) => ({ id: "kit-" + k.id, name: k.name, price: k.price, was: k.old_price, unit: "kit", details: k.items, badge: k.badge, quarta: k.promo_quarta && !!k.old_price }));
   const sections = c.categories
     .map((cat) => ({
       name: cat.name,
@@ -17,7 +17,7 @@ export default async function Home() {
         .filter((p) => p.available)
         .map((p) => {
           const price = effectivePrice(p);
-          return { id: p.id, name: p.name, price, was: price < p.price ? p.price : null, unit: p.unit as string, quarta: p.promo_quarta && price < p.price };
+          return { id: p.id, name: p.name, price, was: price < p.price ? p.price : null, unit: p.unit as string };
         }),
     }))
     .filter((s) => s.items.length);

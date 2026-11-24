@@ -37,7 +37,6 @@ export type Product = {
   unit: Unit;
   price: number;
   promo_price: number | null;
-  promo_quarta: boolean; // promoção vale só às quartas
   image_url: string | null;
   animal: Animal | null;
   cut_regions: string[];
@@ -56,6 +55,7 @@ export type Kit = {
   items: string[];
   price: number;
   old_price: number | null;
+  promo_quarta: boolean; // "de/por" só vale às quartas; nos outros dias cobra o preço "de"
   image_url: string | null;
   badge: string | null;
   note: string | null;

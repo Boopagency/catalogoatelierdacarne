@@ -514,16 +514,16 @@ select id, 'espetinho-xixo', 'Espetinho Xixo', 'Carne, linguiça, pimentão e ce
 from public.categories where slug = 'espetinhos'
 on conflict (slug) do nothing;
 
-insert into public.kits (slug, name, tagline, items, price, old_price, image_url, badge, note, sort_order)
-values ('kit-semanal', 'Kit Semanal', 'A semana inteira resolvida', array['500 g Strogonoff de carne', '500 g Moída de patinho', '500 g Bife de patinho', '500 g Filé de peito de frango', '500 g Strogonoff de frango', '500 g Sobrepaleta suína']::text[], 139.90, null, '/categorias/suinas.webp', 'Mais vendido', null, 0)
+insert into public.kits (slug, name, tagline, items, price, old_price, promo_quarta, image_url, badge, note, sort_order)
+values ('kit-semanal', 'Kit Semanal', 'A semana inteira resolvida', array['500 g Strogonoff de carne', '500 g Moída de patinho', '500 g Bife de patinho', '500 g Filé de peito de frango', '500 g Strogonoff de frango', '500 g Sobrepaleta suína']::text[], 139.90, null, false, '/categorias/suinas.webp', 'Mais vendido', null, 0)
 on conflict (slug) do nothing;
 
-insert into public.kits (slug, name, tagline, items, price, old_price, image_url, badge, note, sort_order)
-values ('quarta-do-hamburguer', 'Quarta do Hambúrguer', 'Burger night completa para 6', array['6 pães brioche', '6 hambúrgueres 150 g (fraldinha ou costela)', '6 fatias de queijo cheddar', '12 fatias de bacon', '1 sacola térmica']::text[], 59.90, null, '/categorias/hamburgueres.webp', 'Toda quarta', null, 1)
+insert into public.kits (slug, name, tagline, items, price, old_price, promo_quarta, image_url, badge, note, sort_order)
+values ('quarta-do-hamburguer', 'Quarta do Hambúrguer', 'Burger night completa para 6', array['6 pães brioche', '6 hambúrgueres 150 g (fraldinha ou costela)', '6 fatias de queijo cheddar', '12 fatias de bacon', '1 sacola térmica']::text[], 69.90, 79.90, true, '/categorias/hamburgueres.webp', 'Toda quarta', null, 1)
 on conflict (slug) do nothing;
 
-insert into public.kits (slug, name, tagline, items, price, old_price, image_url, badge, note, sort_order)
-values ('kit-churrasco', 'Kit Churrasco', 'O churrasco de domingo, pronto', array['1 kg Contrafilé com osso', '1 kg Coxinha da asa temperada', '500 g Linguiça Toscana Bizinelli', '1 Pão de alho Santa Massa 240 g']::text[], 129.90, null, '/categorias/espetinhos.webp', 'Pedir com 2h', 'Pedido com 2 horas de antecedência.', 2)
+insert into public.kits (slug, name, tagline, items, price, old_price, promo_quarta, image_url, badge, note, sort_order)
+values ('kit-churrasco', 'Kit Churrasco', 'O churrasco de domingo, pronto', array['1 kg Contrafilé com osso', '1 kg Coxinha da asa temperada', '500 g Linguiça Toscana Bizinelli', '1 Pão de alho Santa Massa 240 g']::text[], 129.90, null, false, '/categorias/espetinhos.webp', 'Pedir com 2h', 'Pedido com 2 horas de antecedência.', 2)
 on conflict (slug) do nothing;
 
 commit;

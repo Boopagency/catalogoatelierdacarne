@@ -108,6 +108,7 @@ function KitEditor({ kit, onClose, onSaved, onDeleted }: { kit: Kit | "new" | nu
       items: items.split("\n").map((s) => s.trim()).filter(Boolean),
       price: p,
       old_price: op && op > p ? op : null,
+      promo_quarta: op && op > p ? (d.promo_quarta ?? false) : false,
       image_url: d.image_url ?? null,
       badge: d.badge?.trim() || null,
       note: d.note?.trim() || null,
@@ -153,6 +154,12 @@ function KitEditor({ kit, onClose, onSaved, onDeleted }: { kit: Kit | "new" | nu
           <Field label="Selo"><Input value={d.badge ?? ""} onChange={(e) => setD((x) => ({ ...x, badge: e.target.value }))} placeholder="Ex.: Toda quarta" maxLength={22} /></Field>
           <Field label="Aviso"><Input value={d.note ?? ""} onChange={(e) => setD((x) => ({ ...x, note: e.target.value }))} placeholder="Ex.: Pedir com 2h" /></Field>
         </div>
+        {old.trim() && (
+          <label className="flex items-center justify-between rounded-2xl border border-line bg-bg-2/60 px-4 py-3">
+            <span className="text-sm text-ink">Promoção só às quartas<span className="block text-xs text-muted">Nos outros dias cobra o preço “de”.</span></span>
+            <Switch checked={d.promo_quarta ?? false} onChange={(v) => setD((x) => ({ ...x, promo_quarta: v }))} />
+          </label>
+        )}
         <label className="flex items-center justify-between rounded-2xl border border-line bg-bg-2/60 px-4 py-3">
           <span className="text-sm text-ink">Visível no catálogo</span>
           <Switch checked={d.available ?? true} onChange={(v) => setD((x) => ({ ...x, available: v }))} />
