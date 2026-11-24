@@ -30,7 +30,7 @@
         { "n": "Prime Rib Suíno", "p": 29.99, "a": "suino", "r": ["carre"], "t": ["Grelha", "Forno"], "d": "Carré suíno alto, com osso, macio e suculento. Fica incrível na brasa ou selado e finalizado no forno." },
         { "n": "T-Bone", "p": 59.99, "r": ["contrafile", "file-mignon"], "t": ["Grelha", "Parrilla"], "d": "Dois cortes em um: contrafilé de um lado e mignon do outro, separados pelo osso em T." },
         { "n": "Bife Ancho", "p": 75.99, "r": ["ancho"], "t": ["Grelha", "Frigideira"], "d": "Bifes altos de ancho, prontos para selar. Gordura entremeada que derrete e perfuma a carne." },
-        { "n": "Contra Filé Chorizo", "p": 79.99, "r": ["contrafile"], "t": ["Grelha", "Parrilla"], "d": "Bife de chorizo à moda argentina: alto, com capa de gordura lateral e sabor marcante.", "f": true },
+        { "n": "Contra Filé Chorizo", "p": 79.99, "pp": 69.99, "q": true, "r": ["contrafile"], "t": ["Grelha", "Parrilla"], "d": "Bife de chorizo à moda argentina: alto, com capa de gordura lateral e sabor marcante.", "f": true },
         { "n": "Cowboy Steak", "p": 79.99, "r": ["ancho"], "t": ["Grelha", "Parrilla"], "b": "Destaque", "d": "Ancho com o osso da costela aparado. Um corte imponente para ser o centro da mesa." },
         { "n": "Denver Steak", "p": 79.99, "r": ["acem"], "t": ["Grelha", "Frigideira"], "d": "Corte do miolo do acém com marmoreio surpreendente. Macio, saboroso e ótimo custo-benefício." },
         { "n": "Flat Iron Steak", "p": 89.99, "r": ["paleta"], "t": ["Grelha", "Frigideira"], "d": "Retirado do miolo da paleta: textura macia e sabor intenso, um dos cortes mais macios do boi." },

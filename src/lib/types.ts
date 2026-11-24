@@ -37,6 +37,7 @@ export type Product = {
   unit: Unit;
   price: number;
   promo_price: number | null;
+  promo_quarta: boolean; // promoção vale só às quartas
   image_url: string | null;
   animal: Animal | null;
   cut_regions: string[];

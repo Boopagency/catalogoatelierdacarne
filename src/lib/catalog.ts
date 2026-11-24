@@ -7,7 +7,7 @@ import { supabasePublic } from "./supabase/server";
 import type { Catalog, CategoryWithProducts, Kit, Product, Settings } from "./types";
 
 type RawProduct = {
-  n: string; p: number; u?: "kg" | "un"; r?: string[]; a?: Animal; d?: string; t?: string[]; b?: string; f?: boolean;
+  n: string; p: number; u?: "kg" | "un"; r?: string[]; a?: Animal; d?: string; t?: string[]; b?: string; f?: boolean; pp?: number; q?: boolean;
 };
 
 /** Catálogo a partir do JSON (modo demonstração, sem Supabase). */
@@ -30,7 +30,8 @@ export function catalogFromJson(): Catalog {
         description: p.d ?? null,
         unit: p.u ?? "kg",
         price: p.p,
-        promo_price: null,
+        promo_price: p.pp ?? null,
+        promo_quarta: Boolean(p.q),
         image_url: null,
         animal: p.a ?? (c.animal as Animal | null) ?? null,
         cut_regions: p.r ?? [],
@@ -56,7 +57,22 @@ export function catalogFromJson(): Catalog {
     available: true,
     sort_order: ki,
   }));
-  return { settings: raw.settings as Settings, categories, kits, live: false };
+  return applyWednesday({ settings: raw.settings as Settings, categories, kits, live: false });
+}
+
+/** Promoção marcada "só às quartas" some nos outros dias (horário de Brasília). */
+export function isWednesday() {
+  return new Intl.DateTimeFormat("en-US", { timeZone: "America/Sao_Paulo", weekday: "short" }).format(new Date()) === "Wed";
+}
+function applyWednesday(c: Catalog): Catalog {
+  if (isWednesday()) return c;
+  return {
+    ...c,
+    categories: c.categories.map((cat) => ({
+      ...cat,
+      products: cat.products.map((p) => (p.promo_quarta ? { ...p, promo_price: null } : p)),
+    })),
+  };
 }
 
 const num = (v: unknown) => (v === null || v === undefined ? null : Number(v));
@@ -78,7 +94,7 @@ export async function getCatalog(): Promise<Catalog> {
   const prods = (products.data ?? []).map(
     (p): Product => ({ ...p, price: Number(p.price), promo_price: num(p.promo_price) })
   );
-  return {
+  return applyWednesday({
     settings: (settings.data as Settings) ?? catalogFromJson().settings,
     categories: (categories.data ?? []).map((c) => ({
       ...c,
@@ -86,5 +102,5 @@ export async function getCatalog(): Promise<Catalog> {
     })),
     kits: (kits.data ?? []).map((k): Kit => ({ ...k, price: Number(k.price), old_price: num(k.old_price) })),
     live: true,
-  };
+  });
 }

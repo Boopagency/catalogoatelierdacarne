@@ -278,6 +278,7 @@ function ProductEditor({
             unit: "kg",
             price: 0,
             promo_price: null,
+            promo_quarta: false,
             image_url: null,
             animal: cat?.animal ?? null,
             cut_regions: [],
@@ -310,6 +311,7 @@ function ProductEditor({
       unit: d.unit,
       price: p,
       promo_price: pp,
+      promo_quarta: pp === null ? false : d.promo_quarta,
       image_url: d.image_url,
       animal: d.animal,
       cut_regions: d.animal ? d.cut_regions : [],
@@ -380,6 +382,15 @@ function ProductEditor({
                 <Input inputMode="decimal" value={promo} onChange={(e) => setPromo(e.target.value)} placeholder="sem promoção" className="tabular" />
               </Field>
             </div>
+            {promo.trim() && (
+              <div className="flex items-center justify-between rounded-2xl border border-line bg-bg-2/60 px-4 py-3">
+                <div>
+                  <p className="text-sm font-medium text-ink">Promoção só às quartas</p>
+                  <p className="text-xs text-muted">Nos outros dias volta sozinha ao preço normal.</p>
+                </div>
+                <Switch checked={d.promo_quarta} onChange={(v) => set({ promo_quarta: v })} />
+              </div>
+            )}
             <div className="flex items-center justify-between rounded-2xl border border-line bg-bg-2/60 px-4 py-3">
               <div>
                 <p className="text-sm font-medium text-ink">Disponível hoje</p>
