@@ -118,7 +118,7 @@ export function Storefront({ catalog }: { catalog: Catalog }) {
       />
       <MobileCartBar hidden={typing} raised={searchOpen} />
       <ProductSheet product={selected} category={selected ? catById.get(selected.category_id) ?? null : null} onClose={close} />
-      <CartDrawer settings={settings} live={catalog.live} />
+      <CartDrawer settings={settings} />
     </>
   );
 }

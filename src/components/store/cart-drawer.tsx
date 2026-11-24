@@ -1,8 +1,7 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { ArrowLeft, Loader2 } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import { toast } from "sonner";
 import { CutDiagram } from "@/components/cut-diagram";
 import { WhatsAppIcon } from "@/components/ui/icons";
@@ -11,15 +10,13 @@ import { QtyStepper } from "@/components/ui/qty-stepper";
 import { Sheet } from "@/components/ui/sheet";
 import { cartTotal, lineTotal, useCart, type CartLine } from "@/lib/cart";
 import { brl, formatQty, maskPhoneInput } from "@/lib/format";
-import { saveLocalOrder } from "@/lib/local-orders";
-import { supabaseBrowser } from "@/lib/supabase/client";
 import type { Settings } from "@/lib/types";
 import { buildOrderMessage, waLink } from "@/lib/whatsapp";
 
 const WHEN = ["O quanto antes", "Hoje à tarde", "Hoje à noite", "Amanhã cedo", "Amanhã à tarde"];
 const PAYMENTS = ["Pix", "Cartão", "Dinheiro"];
 
-export function CartDrawer({ settings, live }: { settings: Settings; live: boolean }) {
+export function CartDrawer({ settings }: { settings: Settings }) {
   const open = useCart((s) => s.open);
   const setOpen = useCart((s) => s.setOpen);
   const lines = useCart((s) => s.lines);
@@ -51,7 +48,7 @@ export function CartDrawer({ settings, live }: { settings: Settings; live: boole
       ) : step === "cart" ? (
         <CartLines lines={lines} onNext={() => setStep("checkout")} />
       ) : (
-        <Checkout settings={settings} live={live} onDone={close} />
+        <Checkout settings={settings} onDone={close} />
       )}
     </Sheet>
   );
@@ -177,76 +174,31 @@ function Boxes({ options, value, onChange, cols }: { options: { id: string; labe
   );
 }
 
-function Checkout({ settings, live, onDone }: { settings: Settings; live: boolean; onDone: () => void }) {
-  const router = useRouter();
+function Checkout({ settings, onDone }: { settings: Settings; onDone: () => void }) {
   const lines = useCart((s) => s.lines);
   const info = useCart((s) => s.checkout);
   const setInfo = useCart((s) => s.setCheckout);
   const clear = useCart((s) => s.clear);
-  const [sending, setSending] = useState(false);
   const total = cartTotal(lines);
 
   const canDeliver = settings.delivery_enabled;
   const canPickup = settings.pickup_enabled;
   const fulfillment = !canDeliver ? "retirada" : !canPickup ? "entrega" : info.fulfillment;
 
-  const submit = async (e: React.FormEvent) => {
+  const submit = (e: React.FormEvent) => {
     e.preventDefault();
     const phoneDigits = info.phone.replace(/\D/g, "");
     if (info.name.trim().length < 2) return toast.error("Informe seu nome.");
     if (phoneDigits.length < 10) return toast.error("Informe seu WhatsApp com DDD.");
     if (fulfillment === "entrega" && info.address.trim().length < 5) return toast.error("Informe o endereço de entrega.");
 
-    setSending(true);
-    try {
-      let code: string;
-      let number: number | null = null;
-      if (live) {
-        const { data, error } = await supabaseBrowser().rpc("place_order", {
-          payload: {
-            customer_name: info.name,
-            customer_phone: phoneDigits,
-            fulfillment,
-            address: fulfillment === "entrega" ? info.address : null,
-            neighborhood: fulfillment === "entrega" ? info.neighborhood : null,
-            scheduled_for: info.when,
-            payment_method: info.payment,
-            notes: info.notes,
-            items: lines.map((l) => ({ type: l.type, id: l.id, quantity: l.qty, notes: l.notes })),
-          },
-        });
-        if (error) throw new Error(error.message);
-        code = data.code;
-        number = data.number;
-      } else {
-        code = Math.random().toString(36).slice(2, 8).toUpperCase();
-      }
-
-      const trackUrl = live ? `${window.location.origin}/pedido/${code}` : undefined;
-      const message = buildOrderMessage({ storeName: settings.store_name, lines, total, info: { ...info, fulfillment }, number, code, trackUrl });
-      saveLocalOrder({
-        code,
-        number,
-        message,
-        whatsapp: settings.whatsapp,
-        total,
-        fulfillment,
-        lines: lines.map((l) => ({ name: l.name, unit: l.unit, quantity: l.qty, unit_price: l.price, line_total: lineTotal(l), notes: l.notes || null })),
-        created_at: new Date().toISOString(),
-      });
-
-      // Desktop abre o WhatsApp em nova aba no próprio clique; no celular a página do pedido redireciona
-      const isDesktop = window.matchMedia("(pointer: fine)").matches;
-      if (isDesktop) window.open(waLink(settings.whatsapp, message), "_blank", "noopener");
-
-      clear();
-      onDone();
-      router.push(`/pedido/${code}?novo=1${isDesktop ? "&aberto=1" : ""}`);
-    } catch (err) {
-      toast.error(`Não foi possível registrar o pedido. ${err instanceof Error ? err.message : "Tente de novo."}`);
-    } finally {
-      setSending(false);
-    }
+    const message = buildOrderMessage({ storeName: settings.store_name, lines, total, info: { ...info, fulfillment } });
+    const url = waLink(settings.whatsapp, message);
+    // Computador abre o WhatsApp Web em outra aba; celular abre o app direto
+    if (window.matchMedia("(pointer: fine)").matches) window.open(url, "_blank", "noopener");
+    else window.location.href = url;
+    clear();
+    onDone();
   };
 
   return (
@@ -339,11 +291,10 @@ function Checkout({ settings, live, onDone }: { settings: Settings; live: boolea
         </div>
         <button
           type="submit"
-          disabled={sending}
-          className="sign focus-ring flex h-14 w-full items-center justify-center gap-3 bg-red text-[18px] font-extrabold text-white transition hover:bg-red-bright disabled:opacity-70"
+          className="sign focus-ring flex h-14 w-full items-center justify-center gap-3 bg-red text-[18px] font-extrabold text-white transition hover:bg-red-bright"
         >
-          {sending ? <Loader2 className="size-5 animate-spin" /> : <WhatsAppIcon className="size-5" />}
-          {sending ? "Registrando pedido" : "Enviar pedido no WhatsApp"}
+          <WhatsAppIcon className="size-5" />
+          Enviar pedido no WhatsApp
         </button>
         <p className="mt-2 text-center text-[12px] italic text-muted">Os detalhes finais você confirma com a loja no WhatsApp.</p>
       </div>

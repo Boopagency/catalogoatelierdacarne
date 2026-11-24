@@ -2,8 +2,6 @@ import "server-only";
 import raw from "@/data/catalog.json";
 import type { Animal } from "./anatomy";
 import { slugify } from "./format";
-import { isSupabaseConfigured } from "./supabase/config";
-import { supabasePublic } from "./supabase/server";
 import { getSheetCatalog } from "./sheet";
 import type { Catalog, CategoryWithProducts, Kit, Product, Settings } from "./types";
 
@@ -11,11 +9,7 @@ type RawProduct = {
   n: string; p: number; u?: "kg" | "un"; r?: string[]; a?: Animal; d?: string; t?: string[]; b?: string; f?: boolean;
 };
 
-/** Catálogo a partir do JSON (modo demonstração, sem Supabase). */
-export function catalogFromJson(): Catalog {
-  return applyWednesday(rawCatalog());
-}
-
+/** Catálogo base do catalog.json: textos, capas, mapa de cortes e preços de reserva. */
 function rawCatalog(): Catalog {
   const categories: CategoryWithProducts[] = raw.categories.map((c, ci) => ({
     id: c.slug,
@@ -62,7 +56,7 @@ function rawCatalog(): Catalog {
     available: true,
     sort_order: ki,
   }));
-  return { settings: raw.settings as Settings, categories, kits, live: false };
+  return { settings: raw.settings as Settings, categories, kits };
 }
 
 /** Kit com promoção "só às quartas": nos outros dias volta ao preço "de" (horário de Brasília). */
@@ -77,34 +71,8 @@ function applyWednesday(c: Catalog): Catalog {
   };
 }
 
-const num = (v: unknown) => (v === null || v === undefined ? null : Number(v));
-
+/** Preços vêm da planilha (SHEET_URL); sem ela, do catalog.json. */
 export async function getCatalog(): Promise<Catalog> {
   const sheet = process.env.SHEET_URL;
-  if (sheet) return applyWednesday(await getSheetCatalog(sheet, rawCatalog()));
-  if (!isSupabaseConfigured()) return catalogFromJson();
-  const sb = supabasePublic();
-  const [settings, categories, products, kits] = await Promise.all([
-    sb.from("settings").select("*").eq("id", 1).maybeSingle(),
-    sb.from("categories").select("*").eq("active", true).order("sort_order"),
-    sb.from("products").select("*").order("sort_order").order("name"),
-    sb.from("kits").select("*").order("sort_order"),
-  ]);
-  const err = settings.error || categories.error || products.error || kits.error;
-  if (err) {
-    console.error("Falha ao ler catálogo do Supabase", err);
-    return catalogFromJson();
-  }
-  const prods = (products.data ?? []).map(
-    (p): Product => ({ ...p, price: Number(p.price), promo_price: num(p.promo_price) })
-  );
-  return applyWednesday({
-    settings: (settings.data as Settings) ?? catalogFromJson().settings,
-    categories: (categories.data ?? []).map((c) => ({
-      ...c,
-      products: prods.filter((p) => p.category_id === c.id),
-    })),
-    kits: (kits.data ?? []).map((k): Kit => ({ ...k, price: Number(k.price), old_price: num(k.old_price) })),
-    live: true,
-  });
+  return applyWednesday(sheet ? await getSheetCatalog(sheet, rawCatalog()) : rawCatalog());
 }
